@@ -1,0 +1,15 @@
+source,target,direction,weight_1,weight_2
+s,n1,unidirectional,6,1
+s,n2,unidirectional,2,1
+s,n4,unidirectional,8,4
+n1,n3,unidirectional,1,9
+n1,n4,unidirectional,3,2
+n1,n6,unidirectional,3,8
+n2,n4,unidirectional,1,4
+n2,n5,unidirectional,6,1
+n2,t,unidirectional,8,9
+n3,n6,unidirectional,2,3
+n4,n6,unidirectional,6,4
+n4,t,unidirectional,1,5
+n5,t,unidirectional,1,1
+
