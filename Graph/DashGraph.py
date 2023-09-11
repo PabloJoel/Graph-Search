@@ -6,9 +6,6 @@ import dash_cytoscape as cyto
 
 from Graph.Graph import Graph
 
-#todo: check if there is an option to display the graph avoiding edges touching edges
-#todo: increase arrow size and label size
-
 
 class DashGraph(Graph):
     """
