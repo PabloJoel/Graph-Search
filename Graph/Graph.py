@@ -8,7 +8,6 @@ class Graph:
     def __init__(self, data):
         """
         This method loads the data that represents the Graph.
-
         :param pd.DataFrame data: pandas DataFrame containing the graph details.
         """
         self.data = data
@@ -16,6 +15,7 @@ class Graph:
     def get_predecessors(self, node):
         """
         Get the predecessors of a given node.
+        :param str node: a vertex
         :return:
         """
         nodes = self.data.loc[self.data['target'].str.contains(node) == True]
@@ -23,7 +23,7 @@ class Graph:
     def get_successors(self, node):
         """
         Get the successors of a given node.
-        :param node:
+        :param str node: a vertex
         :return:
         """
         nodes = self.data.loc[self.data['source'].str.contains(node) == True]
