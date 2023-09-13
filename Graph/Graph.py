@@ -11,6 +11,7 @@ class Graph:
         :param pd.DataFrame data: pandas DataFrame containing the graph details.
         """
         self.data = data
+        self.data['visited'] = False
 
     def get_predecessors(self, node):
         """

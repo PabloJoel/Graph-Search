@@ -24,6 +24,7 @@ def test_predecessors():
     weight1 = [1,3,3,2,6,1]
     weight2 = [9,2,8,3,4,5]
     predecessors = pd.DataFrame(data={'source': source, 'target': target, 'direction': dir, 'weight_1': weight1, 'weight_2': weight2})
+    predecessors['visited'] = False
 
     assert graph.get_predecessors('n6').equals(predecessors)
 
@@ -44,5 +45,6 @@ def test_successors():
     weight1 = [6,1,1]
     weight2 = [4,5,1]
     successors = pd.DataFrame(data={'source': source, 'target': target, 'direction': dir, 'weight_1': weight1, 'weight_2': weight2})
+    successors['visited'] = False
 
     assert graph.get_successors('n2').equals(successors)
