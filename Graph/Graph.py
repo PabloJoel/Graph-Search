@@ -13,6 +13,22 @@ class Graph:
         """
         self.data = data
 
+    def get_predecessors(self, node):
+        """
+        Get the predecessors of a given node.
+        :return:
+        """
+        nodes = self.data.loc[self.data['target'].str.contains(node) == True]
+        return self.data.loc[self.data['source'].isin(nodes['source'])].reset_index(drop=True)
+    def get_successors(self, node):
+        """
+        Get the successors of a given node.
+        :param node:
+        :return:
+        """
+        nodes = self.data.loc[self.data['source'].str.contains(node) == True]
+        return self.data.loc[self.data['source'].isin(nodes['target'])].reset_index(drop=True)
+
     def show(self):
         """
         This method prints in the console the current state of the Graph.
