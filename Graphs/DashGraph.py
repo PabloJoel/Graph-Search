@@ -4,7 +4,7 @@ import pandas as pd
 from dash import Dash, html
 import dash_cytoscape as cyto
 
-from Graph.Graph import Graph
+from Graphs.Graph import Graph
 
 
 class DashGraph(Graph):
