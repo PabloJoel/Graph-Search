@@ -4,7 +4,7 @@ from Graphs.Graph import Graph
 from Algorithms.BFS import BFS
 
 
-def test_data():
+def test_data_bidirectional():
     data = pd.read_csv('bfs-data.csv')
     graph = Graph(data, bidirectional=True)
     bfs = BFS(graph)
@@ -31,5 +31,25 @@ def test_data():
         {'source': 'Nürnberg', 'target': 'Stuttgart'},
         {'source': 'Stuttgart', 'target': 'Nürnberg'},
     ])
+
+    assert bfs.solution.data.equals(expected)
+
+
+def test_data():
+    data = pd.read_csv('bfs-data.csv')
+    graph = Graph(data)
+    bfs = BFS(graph)
+    bfs.run('Frankfurt')
+    bfs.show()
+
+    expected = pd.DataFrame(data=[
+        {'source': 'Frankfurt', 'target': 'Mannheim'},
+        {'source': 'Frankfurt', 'target': 'Würzburg'},
+        {'source': 'Frankfurt', 'target': 'Kassel'},
+        {'source': 'Mannheim', 'target': 'Karlsruhe'},
+        {'source': 'Würzburg', 'target': 'Erfurt'},
+        {'source': 'Würzburg', 'target': 'Nürnberg'},
+        {'source': 'Kassel', 'target': 'München'},
+        {'source': 'Karlsruhe', 'target': 'Augsburg'}    ])
 
     assert bfs.solution.data.equals(expected)
