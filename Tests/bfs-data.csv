@@ -1,0 +1,12 @@
+source,target,weight_1
+Frankfurt,Mannheim,85
+Frankfurt,Würzburg,217
+Frankfurt,Kassel,173
+Mannheim,Karlsruhe,80
+Würzburg,Erfurt,186
+Würzburg,Nürnberg,103
+Stuttgart,Nürnberg,183
+Kassel,München,502
+Karlsruhe,Augsburg,250
+Augsburg,München,84
+Nürnberg,München,167
