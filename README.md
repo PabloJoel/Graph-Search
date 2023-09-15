@@ -8,3 +8,5 @@
   - Increase node size
   - Store nodes position when moved to avoid refreshing the Graph
 - Should the show function in Graph return something instead of doing something?
+- Graph modifications:
+  - Dynamic column names
