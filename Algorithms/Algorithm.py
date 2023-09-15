@@ -1,14 +1,13 @@
 from abc import abstractmethod
-import pandas as pd
 
 from Graphs.Graph import Graph
 
 
 class Algorithm:
 
-    def __init__(self, graph: Graph):
+    def __init__(self, graph: Graph, solution: Graph):
         self.graph = graph
-        self.solution = Graph(pd.DataFrame())
+        self.solution = solution
 
     def show(self):
         print('Showing graph')
