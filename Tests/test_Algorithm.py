@@ -6,5 +6,5 @@ from Graphs.Graph import Graph
 
 def test_graph_data():
     graph = Graph(pd.read_csv('graph-data.csv'))
-    algorithm = Algorithm(graph, None)
+    algorithm = Algorithm(graph, solution=None, visualizer=None)
     assert algorithm.graph.data.equals(graph.data)
