@@ -1,25 +1,45 @@
 from abc import abstractmethod
 
 from Graphs.Graph import Graph
+from Visualizers.Visualizer import Visualizer
 
 
 class Algorithm:
-
-    def __init__(self, graph: Graph, solution: Graph):
+    """
+    Algorithm is the interface to use to implement Algorithms. It defines the needed methods that any algorithm should
+    contain.
+    """
+    def __init__(self, graph: Graph, solution: Graph, visualizer: Visualizer):
+        """
+        :param Graph graph: input graph containing the data for the algorithm.
+        :param Graph solution: output graph that will contain the result of the algorithm.
+        :param Visualizer visualizer: specific Visualizer implementation to visualize the class.
+        """
         self.graph = graph
         self.solution = solution
+        self.visualizer = visualizer
 
     def show(self):
-        print('Showing graph')
+        """
+        Show the current state of the data graph and solution graph.
+        :return:
+        """
         self.graph.show()
-        print('Showing solution')
         self.solution.show()
 
     @abstractmethod
     def step(self):
+        """
+        Run a single step of the algorithm.
+        :return:
+        """
         pass
 
     @abstractmethod
     def run(self):
+        """
+        Run the whole algorithm, from start to end.
+        :return:
+        """
         pass
 
