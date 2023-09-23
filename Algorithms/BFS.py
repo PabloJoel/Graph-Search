@@ -56,7 +56,7 @@ class BFS(Algorithm):
                     if not self.graph.is_explored(successor):
                         self.graph.add_explored_vertex(successor)
                         queue.append(successor)
-                        self.solution.add_vertex(node, successor)
+                        self.solution.add_edge(node, successor)
         if show_end:
             self.visualizer.show(graph=self.graph)
             self.visualizer.show(graph=self.solution)
