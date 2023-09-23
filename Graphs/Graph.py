@@ -125,7 +125,10 @@ class Graph:
         :param str vertex:
         :return:
         """
-        return list(self.data[self.data[self.target_col] == vertex][self.source_col])
+        try:
+            return list(self.data[self.data[self.target_col] == vertex][self.source_col])
+        except:
+            return list()
 
     def get_successors(self, vertex):
         """
@@ -133,16 +136,22 @@ class Graph:
         :param str vertex:
         :return:
         """
-        return list(self.data[self.data[self.source_col] == vertex][self.target_col])
+        try:
+            return list(self.data[self.data[self.source_col] == vertex][self.target_col])
+        except:
+            return list()
 
     def get_all_vertices(self):
         """
         Returns a set containing all the vertices in the graph.
         :return:
         """
-        vertices = set(self.data[self.source_col])          # Source vertices
-        vertices.update(self.data[self.target_col])         # Target vertices
-        return vertices
+        try:
+            vertices = set(self.data[self.source_col])          # Source vertices
+            vertices.update(self.data[self.target_col])         # Target vertices
+            return vertices
+        except:
+            return set()
 
     def show(self):
         """
