@@ -52,7 +52,7 @@ def test_data_bidirectional_dash():
     data = pd.read_csv('dijkstra-data.csv')
     graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
     bfs = Dijkstra(graph, visualizer=DashVisualizer())
-    bfs.run(start_vertex='a', end_vertex='c', show_end=True)
+    bfs.run(start_vertex='a', show_end=True)
 
 
 def test_data_bidirectional_finish_dash():
