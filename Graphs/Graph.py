@@ -34,9 +34,9 @@ class Graph:
 
         self.explored_nodes = set()
 
-    def add_vertex(self, source, target, weights=dict()):
+    def add_edge(self, source, target, weights=dict()):
         """
-        Add a vertex to the graph.
+        Add an edge from source to target to the graph. Optionally, a dict of weights can be added to the edge.
         :param str source: source vertex.
         :param str target:  target vertex.
         :param dict weights: dict where keys are weight column names and values are the actual weights.
@@ -61,6 +61,18 @@ class Graph:
         self.data = pd.concat([self.data, node])
         self.data.reset_index(drop=True, inplace=True)
 
+    def remove_edge(self, source, target):
+        """
+        Remove the edge between source and target vertices, if it exists.
+        :param str source: source vertex.
+        :param str target:  target vertex.
+        :return:
+        """
+        if not self.data.empty:
+            self.data.drop(self.data[(self.data[self.source_col] == source) & (self.data[self.target_col] == target)].index, inplace=True)
+            if self.bidirectional:
+                self.data.drop(self.data[(self.data[self.source_col] == target) & (self.data[self.target_col] == source)].index, inplace=True)
+
     def is_explored(self, vertex):
         """
         Returns True if the vertex has been marked as explored, otherwise False.
@@ -77,16 +89,35 @@ class Graph:
         """
         self.explored_nodes.add(vertex)
 
+    def get_explored_vertices(self):
+        """
+        Returns all explored vertices.
+        :return:
+        """
+        return self.explored_nodes
+
+    def get_unexplored_vertices(self):
+        """
+        Returns all unexplored vertices.
+        :return:
+        """
+        all_vertices = self.get_all_vertices()
+        return {vertex for vertex in all_vertices if not self.is_explored(vertex)}
+
     def get_weight(self, source, target):
         """
-        Returns the weights of the edge between source vertex and target vertex.
+        Returns the weights of the edge between source vertex and target vertex. If there is no connection, returns an
+        empty dictionary.
         :param str source: source vertex of the edge.
         :param str target: target vertex of the edge.
         :return:
         """
         source = self.data[self.data[self.source_col]==source]
         source_target = source[source[self.target_col]==target]
-        return source_target[self.weight_cols].to_dict('records')[0]
+        if source_target.empty:
+            return dict()
+        else:
+            return source_target[self.weight_cols].to_dict('records')[0]
 
     def get_predecessors(self, vertex):
         """
@@ -103,6 +134,15 @@ class Graph:
         :return:
         """
         return list(self.data[self.data[self.source_col] == vertex][self.target_col])
+
+    def get_all_vertices(self):
+        """
+        Returns a set containing all the vertices in the graph.
+        :return:
+        """
+        vertices = set(self.data[self.source_col])          # Source vertices
+        vertices.update(self.data[self.target_col])         # Target vertices
+        return vertices
 
     def show(self):
         """
