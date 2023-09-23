@@ -45,6 +45,7 @@ class Dijkstra(Algorithm):
         """
         # Initialize distances
         dist = {vertex: float("inf") if vertex != 's' else 0 for vertex in self.graph.get_all_vertices()}
+        prev = {vertex: None for vertex in self.graph.get_all_vertices()}
         unexplored_vertices = self.graph.get_unexplored_vertices()
         current_vertex = start_vertex
 
@@ -52,8 +53,19 @@ class Dijkstra(Algorithm):
             self.graph.add_explored_vertex(current_vertex)
 
             if current_vertex == end_vertex:    # Shortest path to the end vertex found
-                #todo
-                return
+                self.solution.data = pd.DataFrame()
+                path_ready = False
+                while not path_ready:
+                    source = prev[current_vertex]
+                    target = current_vertex
+                    cost = next(iter(self.graph.get_weight(source=source, target=target).values()))
+                    self.solution.add_edge(source=source, target=target, weights={self.graph.weight_cols[0]: cost})
+
+                    if source == start_vertex:
+                        path_ready = True
+                    else:
+                        current_vertex = source
+                break
 
             for successor in self.graph.get_successors(current_vertex):
                 # Calculate distance
@@ -67,6 +79,7 @@ class Dijkstra(Algorithm):
                     if len(predecessor) > 0:
                         self.solution.remove_edge(predecessor[0], successor)                                        # Remove old edge
                     self.solution.add_edge(current_vertex, successor, {self.graph.weight_cols[0]: current_dist})    # Add new edge
+                    prev[successor] = current_vertex
                     dist[successor] = distance                                                                      # Update min distance
 
             # Get the unexplored vertex with the min distance
