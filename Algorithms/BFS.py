@@ -25,7 +25,7 @@ class BFS(Algorithm):
             data=pd.DataFrame(),
             source_col=graph.source_col,
             target_col=graph.target_col,
-            bidirectional=graph.bidirectional,
+            bidirectional=False,
             weight_cols=graph.weight_cols
         )
         super().__init__(graph, solution, visualizer)

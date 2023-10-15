@@ -14,23 +14,14 @@ def test_data_bidirectional():
 
     expected = pd.DataFrame(data=[
         {'source': 'Frankfurt', 'target': 'Mannheim', 'weight_1':85},
-        {'source': 'Mannheim', 'target': 'Frankfurt', 'weight_1':85},
         {'source': 'Frankfurt', 'target': 'Würzburg', 'weight_1':217},
-        {'source': 'Würzburg', 'target': 'Frankfurt', 'weight_1':217},
         {'source': 'Frankfurt', 'target': 'Kassel', 'weight_1':173},
-        {'source': 'Kassel', 'target': 'Frankfurt', 'weight_1':173},
         {'source': 'Mannheim', 'target': 'Karlsruhe', 'weight_1':80},
-        {'source': 'Karlsruhe', 'target': 'Mannheim', 'weight_1':80},
         {'source': 'Würzburg', 'target': 'Erfurt', 'weight_1':186},
-        {'source': 'Erfurt', 'target': 'Würzburg', 'weight_1':186},
         {'source': 'Würzburg', 'target': 'Nürnberg', 'weight_1':103},
-        {'source': 'Nürnberg', 'target': 'Würzburg', 'weight_1':103},
         {'source': 'Kassel', 'target': 'München', 'weight_1':502},
-        {'source': 'München', 'target': 'Kassel', 'weight_1':502},
         {'source': 'Karlsruhe', 'target': 'Augsburg', 'weight_1':250},
-        {'source': 'Augsburg', 'target': 'Karlsruhe', 'weight_1':250},
-        {'source': 'Nürnberg', 'target': 'Stuttgart', 'weight_1':183},
-        {'source': 'Stuttgart', 'target': 'Nürnberg', 'weight_1':183},
+        {'source': 'Nürnberg', 'target': 'Stuttgart', 'weight_1':183}
     ])
 
     assert bfs.solution.data.equals(expected)
