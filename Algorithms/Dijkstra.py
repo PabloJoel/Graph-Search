@@ -25,7 +25,7 @@ class Dijkstra(Algorithm):
             source_col=graph.source_col,
             target_col=graph.target_col,
             weight_cols=graph.weight_cols,
-            bidirectional=graph.bidirectional
+            bidirectional=False
         )
         super().__init__(graph, solution, visualizer)
 
