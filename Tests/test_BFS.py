@@ -70,6 +70,7 @@ def test_data_end():
     bfs = BFS(graph)
     bfs.run('Frankfurt', end_vertex='Erfurt', show_end=True)
 
+
 def test_data_dash_end():
     data = pd.read_csv('bfs-data.csv')
     graph = Graph(data, weight_cols=['weight_1'])
