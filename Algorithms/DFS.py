@@ -25,7 +25,8 @@ class DFS(Algorithm):
             data=pd.DataFrame(),
             source_col=graph.source_col,
             target_col=graph.target_col,
-            bidirectional=graph.bidirectional
+            bidirectional=False,
+            weight_cols=graph.weight_cols
         )
         super().__init__(graph, solution, visualizer)
 
@@ -56,7 +57,8 @@ class DFS(Algorithm):
 
         for successor in self.graph.get_successors(start_vertex):
             if not self.graph.is_explored(successor):
-                self.solution.add_edge(start_vertex, successor)
+                weight = self.graph.get_weight(start_vertex, successor)
+                self.solution.add_edge(start_vertex, successor, weight)
                 finished = self.__dfs_recursion(successor, end_vertex, show_by_step, show_end)
                 if finished:
                     return True
