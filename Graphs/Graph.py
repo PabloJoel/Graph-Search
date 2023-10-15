@@ -112,6 +112,9 @@ class Graph:
         :param str target: target vertex of the edge.
         :return:
         """
+        if len(self.weight_cols) == 0:
+            return list()
+
         source = self.data[self.data[self.source_col]==source]
         source_target = source[source[self.target_col]==target]
         if source_target.empty:

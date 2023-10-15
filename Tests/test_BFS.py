@@ -7,30 +7,30 @@ from Visualizers.DashVisualizer import DashVisualizer
 
 def test_data_bidirectional():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, bidirectional=True)
+    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
     bfs = BFS(graph)
     bfs.run('Frankfurt')
     bfs.show()
 
     expected = pd.DataFrame(data=[
-        {'source': 'Frankfurt', 'target': 'Mannheim'},
-        {'source': 'Mannheim', 'target': 'Frankfurt'},
-        {'source': 'Frankfurt', 'target': 'Würzburg'},
-        {'source': 'Würzburg', 'target': 'Frankfurt'},
-        {'source': 'Frankfurt', 'target': 'Kassel'},
-        {'source': 'Kassel', 'target': 'Frankfurt'},
-        {'source': 'Mannheim', 'target': 'Karlsruhe'},
-        {'source': 'Karlsruhe', 'target': 'Mannheim'},
-        {'source': 'Würzburg', 'target': 'Erfurt'},
-        {'source': 'Erfurt', 'target': 'Würzburg'},
-        {'source': 'Würzburg', 'target': 'Nürnberg'},
-        {'source': 'Nürnberg', 'target': 'Würzburg'},
-        {'source': 'Kassel', 'target': 'München'},
-        {'source': 'München', 'target': 'Kassel'},
-        {'source': 'Karlsruhe', 'target': 'Augsburg'},
-        {'source': 'Augsburg', 'target': 'Karlsruhe'},
-        {'source': 'Nürnberg', 'target': 'Stuttgart'},
-        {'source': 'Stuttgart', 'target': 'Nürnberg'},
+        {'source': 'Frankfurt', 'target': 'Mannheim', 'weight_1':85},
+        {'source': 'Mannheim', 'target': 'Frankfurt', 'weight_1':85},
+        {'source': 'Frankfurt', 'target': 'Würzburg', 'weight_1':217},
+        {'source': 'Würzburg', 'target': 'Frankfurt', 'weight_1':217},
+        {'source': 'Frankfurt', 'target': 'Kassel', 'weight_1':173},
+        {'source': 'Kassel', 'target': 'Frankfurt', 'weight_1':173},
+        {'source': 'Mannheim', 'target': 'Karlsruhe', 'weight_1':80},
+        {'source': 'Karlsruhe', 'target': 'Mannheim', 'weight_1':80},
+        {'source': 'Würzburg', 'target': 'Erfurt', 'weight_1':186},
+        {'source': 'Erfurt', 'target': 'Würzburg', 'weight_1':186},
+        {'source': 'Würzburg', 'target': 'Nürnberg', 'weight_1':103},
+        {'source': 'Nürnberg', 'target': 'Würzburg', 'weight_1':103},
+        {'source': 'Kassel', 'target': 'München', 'weight_1':502},
+        {'source': 'München', 'target': 'Kassel', 'weight_1':502},
+        {'source': 'Karlsruhe', 'target': 'Augsburg', 'weight_1':250},
+        {'source': 'Augsburg', 'target': 'Karlsruhe', 'weight_1':250},
+        {'source': 'Nürnberg', 'target': 'Stuttgart', 'weight_1':183},
+        {'source': 'Stuttgart', 'target': 'Nürnberg', 'weight_1':183},
     ])
 
     assert bfs.solution.data.equals(expected)
@@ -38,20 +38,20 @@ def test_data_bidirectional():
 
 def test_data():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data)
+    graph = Graph(data, weight_cols=['weight_1'])
     bfs = BFS(graph)
     bfs.run('Frankfurt')
     bfs.show()
 
     expected = pd.DataFrame(data=[
-        {'source': 'Frankfurt', 'target': 'Mannheim'},
-        {'source': 'Frankfurt', 'target': 'Würzburg'},
-        {'source': 'Frankfurt', 'target': 'Kassel'},
-        {'source': 'Mannheim', 'target': 'Karlsruhe'},
-        {'source': 'Würzburg', 'target': 'Erfurt'},
-        {'source': 'Würzburg', 'target': 'Nürnberg'},
-        {'source': 'Kassel', 'target': 'München'},
-        {'source': 'Karlsruhe', 'target': 'Augsburg'}
+        {'source': 'Frankfurt', 'target': 'Mannheim', 'weight_1':85},
+        {'source': 'Frankfurt', 'target': 'Würzburg', 'weight_1':217},
+        {'source': 'Frankfurt', 'target': 'Kassel', 'weight_1':173},
+        {'source': 'Mannheim', 'target': 'Karlsruhe', 'weight_1':80},
+        {'source': 'Würzburg', 'target': 'Erfurt', 'weight_1':186},
+        {'source': 'Würzburg', 'target': 'Nürnberg', 'weight_1':103},
+        {'source': 'Kassel', 'target': 'München', 'weight_1':502},
+        {'source': 'Karlsruhe', 'target': 'Augsburg', 'weight_1':250}
     ])
 
     assert bfs.solution.data.equals(expected)
@@ -59,13 +59,26 @@ def test_data():
 
 def test_data_dash():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data)
+    graph = Graph(data, weight_cols=['weight_1'])
     bfs = BFS(graph, visualizer=DashVisualizer())
     bfs.run('Frankfurt', show_end=True)
 
 
+def test_data_end():
+    data = pd.read_csv('bfs-data.csv')
+    graph = Graph(data)
+    bfs = BFS(graph)
+    bfs.run('Frankfurt', end_vertex='Erfurt', show_end=True)
+
+def test_data_dash_end():
+    data = pd.read_csv('bfs-data.csv')
+    graph = Graph(data, weight_cols=['weight_1'])
+    bfs = BFS(graph, visualizer=DashVisualizer())
+    bfs.run('Frankfurt', end_vertex='Erfurt', show_end=True)
+
+
 def test_data_bidirectional_dash():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, bidirectional=True)
+    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
     bfs = BFS(graph, visualizer=DashVisualizer())
     bfs.run('Frankfurt', show_end=True)

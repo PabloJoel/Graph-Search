@@ -25,7 +25,8 @@ class BFS(Algorithm):
             data=pd.DataFrame(),
             source_col=graph.source_col,
             target_col=graph.target_col,
-            bidirectional=graph.bidirectional
+            bidirectional=graph.bidirectional,
+            weight_cols=graph.weight_cols
         )
         super().__init__(graph, solution, visualizer)
 
@@ -47,16 +48,18 @@ class BFS(Algorithm):
         queue.append(start_vertex)
         self.graph.add_explored_vertex(start_vertex)
 
-        while len(queue) > 0:
+        finished = False
+        while len(queue) > 0 and not finished:
             node = queue.popleft()
             if node == end_vertex:
-                return
+                finished = True
             else:
                 for successor in self.graph.get_successors(node):
                     if not self.graph.is_explored(successor):
                         self.graph.add_explored_vertex(successor)
                         queue.append(successor)
-                        self.solution.add_edge(node, successor)
+                        weight = self.graph.get_weight(node, successor)
+                        self.solution.add_edge(node, successor, weights=weight)
         if show_end:
             self.visualizer.show(graph=self.graph)
             self.visualizer.show(graph=self.solution)
