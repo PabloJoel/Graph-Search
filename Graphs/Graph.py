@@ -156,6 +156,23 @@ class Graph:
         except:
             return set()
 
+    def get_path_cost(self, start, end):
+        """
+        Returns the cost of traversing from start to end.
+        :param start: start vertex
+        :param end: end vertex
+        :return:
+        """
+        cost = {weight: 0 for weight in self.weight_cols}
+        node = end
+        while node != start:
+            predecessor = self.get_predecessors(node)[0]
+            weight = self.get_weight(predecessor, node)
+            for col, value in weight.items():
+                cost[col] += value
+            node = predecessor
+        return cost
+
     def show(self):
         """
         This method prints in the console the current state of the Graph.
