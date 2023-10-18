@@ -173,6 +173,32 @@ class Graph:
             node = predecessor
         return cost
 
+    def get_path(self, start, end, prev):
+        """
+        This method returns a Graph representing the path between start and end vertices. To achieve this, a dictionary
+        "prev" must be passed where keys are vertices and their values are the vertex that proceeds them. Only a single
+        vertex can precede a vertex.
+        :param start:
+        :param end:
+        :param prev:
+        :return:
+        """
+        path = Graph(pd.DataFrame(), source_col=self.source_col, target_col=self.target_col,
+                     weight_cols=self.weight_cols, bidirectional=False)
+        path_ready = False
+        current = end
+        while not path_ready:
+            source = prev[current]
+            target = current
+            cost = next(iter(self.get_weight(source=source, target=target).values()))
+            path.add_edge(source=source, target=target, weights={self.weight_cols[0]: cost})
+
+            if source == start:
+                path_ready = True
+            else:
+                current = source
+        return path
+
     def show(self):
         """
         This method prints in the console the current state of the Graph.

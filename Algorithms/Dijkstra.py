@@ -52,19 +52,8 @@ class Dijkstra(Algorithm):
         while len(unexplored_vertices) > 0:
             self.graph.add_explored_vertex(current_vertex)
 
-            if current_vertex == end_vertex:    # Shortest path to the end vertex found
-                self.solution.data = pd.DataFrame()
-                path_ready = False
-                while not path_ready:
-                    source = prev[current_vertex]
-                    target = current_vertex
-                    cost = next(iter(self.graph.get_weight(source=source, target=target).values()))
-                    self.solution.add_edge(source=source, target=target, weights={self.graph.weight_cols[0]: cost})
-
-                    if source == start_vertex:
-                        path_ready = True
-                    else:
-                        current_vertex = source
+            if current_vertex == end_vertex:
+                self.solution = self.graph.get_path(start_vertex, end_vertex, prev)
                 break
 
             for successor in self.graph.get_successors(current_vertex):
