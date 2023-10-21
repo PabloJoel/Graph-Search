@@ -1,0 +1,82 @@
+import pandas as pd
+
+from Algorithms.Algorithm import Algorithm
+from Graphs.Graph import Graph
+from Visualizers.ConsoleVisualizer import ConsoleVisualizer
+from Heuristics.BFS import BFS
+
+class AStar(Algorithm):
+    """
+    A* algorithm
+    """
+
+    def __init__(self, graph: Graph, visualizer=ConsoleVisualizer(), heuristic=BFS):
+        """
+        Creates the algorithm by using the input graph that contains the data, and by creating an empty Graph where the
+        solution is going to be added later.
+        The solution graph is created using the same parameters as the input graph, but empty.
+        :param Graph graph: input graph containing the data.
+        :param Visualizer visualizer: visualizer implementation to visualize the graphs. By default: ConsoleVisualizer.
+        :param heuristic: heuristic function to be used. By default: BFS Heuristic.
+        """
+        solution = Graph(
+            data=pd.DataFrame(),
+            source_col=graph.source_col,
+            target_col=graph.target_col,
+            weight_cols=graph.weight_cols,
+            bidirectional=graph.bidirectional
+        )
+        super().__init__(graph, solution, visualizer)
+        self.heuristic = heuristic(graph)
+
+    def step(self):
+        """
+        Run one step of the algorithm.
+        :return:
+        """
+        pass
+
+    def run(self, start_vertex, end_vertex=None, show_by_step=False, show_end=False):
+        """
+        Runs the algorithm from start_vertex until there are no more vertices to explore or end_vertex has been explored.
+        :param start_vertex:
+        :param end_vertex:
+        :return:
+        """
+        all_vertices = self.graph.get_all_vertices()
+
+        open = {start_vertex}
+        prev = {}
+
+        h = {start_vertex: self.heuristic.calculate(start_vertex, end_vertex)}
+        g = {vertex: float("inf") if vertex != start_vertex else 0 for vertex in all_vertices}
+        f = {vertex: float("inf") if vertex != start_vertex else h[start_vertex] for vertex in all_vertices}
+
+        self.graph.add_explored_vertex(start_vertex)
+
+        while len(open) > 0:
+            open_f = {node:value for node,value in f.items() if node in open}
+            current = min(open_f, key=open_f.get)
+            if current == end_vertex:
+                self.solution = self.graph.get_path_informed(start_vertex, end_vertex, prev)
+                break
+
+            open.remove(current)
+            for successor in self.graph.get_successors(current):
+                cost = next(iter(self.graph.get_weight(source=current, target=successor).values()))
+                g_cost = g[current] + cost
+                if g_cost < g[successor]:
+                    prev[successor] = current
+                    g[successor] = g_cost
+                    if successor not in h:
+                        h[successor] = self.heuristic.calculate(successor, end_vertex)
+                    f[successor] = g_cost + h[successor]
+                    if successor not in open:
+                        open.add(successor)
+
+        if show_end:
+            self.visualizer.show(graph=self.graph)
+            self.visualizer.show(graph=self.solution)
+
+
+
