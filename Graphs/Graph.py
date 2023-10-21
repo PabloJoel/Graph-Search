@@ -173,7 +173,24 @@ class Graph:
             node = predecessor
         return cost
 
-    def get_path(self, start, end, prev):
+    def get_path_uninformed(self, start, end):
+        """
+        Returns the path between start and end, by traversing the graph from end to start.
+        :param start: start vertex
+        :param end: end vertex
+        :return:
+        """
+        path = Graph(pd.DataFrame(), source_col=self.source_col, target_col=self.target_col,
+                     weight_cols=self.weight_cols, bidirectional=False)
+        node = end
+        while node != start:
+            predecessor = self.get_predecessors(node)[0]
+            weight = self.get_weight(predecessor, node)
+            path.add_edge(source=predecessor, target=node, weights=weight)
+            node = predecessor
+        return path
+
+    def get_path_informed(self, start, end, prev):
         """
         This method returns a Graph representing the path between start and end vertices. To achieve this, a dictionary
         "prev" must be passed where keys are vertices and their values are the vertex that proceeds them. Only a single
@@ -190,8 +207,9 @@ class Graph:
         while not path_ready:
             source = prev[current]
             target = current
-            cost = next(iter(self.get_weight(source=source, target=target).values()))
-            path.add_edge(source=source, target=target, weights={self.weight_cols[0]: cost})
+            #cost = next(iter(self.get_weight(source=source, target=target).values()))
+            cost = self.get_weight(source=source, target=target)
+            path.add_edge(source=source, target=target, weights=cost)
 
             if source == start:
                 path_ready = True

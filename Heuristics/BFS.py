@@ -19,6 +19,6 @@ class BFS(Heuristic):
         if start in vertices and end in vertices:
             bfs = BFSAlgorithm(self.graph)
             bfs.run(start, end)
-            return bfs.solution.get_path_cost(start, end)
+            return len(bfs.solution.get_path_uninformed(start, end).data)
         else:
             raise ValueError(f'Either Start node: {start} or End node: {end} are not in the node list: {vertices}')

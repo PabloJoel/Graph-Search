@@ -53,7 +53,7 @@ class Dijkstra(Algorithm):
             self.graph.add_explored_vertex(current_vertex)
 
             if current_vertex == end_vertex:
-                self.solution = self.graph.get_path(start_vertex, end_vertex, prev)
+                self.solution = self.graph.get_path_informed(start_vertex, end_vertex, prev)
                 break
 
             for successor in self.graph.get_successors(current_vertex):
