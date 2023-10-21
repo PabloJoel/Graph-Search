@@ -15,8 +15,8 @@ class Algorithm:
         :param Graph solution: output graph that will contain the result of the algorithm.
         :param Visualizer visualizer: specific Visualizer implementation to visualize the class.
         """
-        self.graph = graph
-        self.solution = solution
+        self.graph = graph.copy()
+        self.solution = solution.copy()
         self.visualizer = visualizer
 
     def show(self):

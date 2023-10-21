@@ -217,6 +217,15 @@ class Graph:
                 current = source
         return path
 
+    def copy(self):
+        """
+        Returns a copy of the graph.
+        :return:
+        """
+        copy = Graph(self.data.copy(deep=True), source_col=self.source_col, target_col=self.target_col, weight_cols=self.weight_cols,
+                     bidirectional=self.bidirectional)
+        return copy
+
     def show(self):
         """
         This method prints in the console the current state of the Graph.
