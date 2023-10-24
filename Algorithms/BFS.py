@@ -53,6 +53,7 @@ class BFS(Algorithm):
             node = queue.popleft()
             if node == end_vertex:
                 finished = True
+                self.solution = self.solution.get_path_uninformed(start_vertex, end_vertex)
             else:
                 for successor in self.graph.get_successors(node):
                     if not self.graph.is_explored(successor):
@@ -60,6 +61,11 @@ class BFS(Algorithm):
                         queue.append(successor)
                         weight = self.graph.get_weight(node, successor)
                         self.solution.add_edge(node, successor, weights=weight)
+
+        if not finished and end_vertex is not None:
+            print(f'Warning, could not find a path to {end_vertex}')
+            self.solution.data = pd.DataFrame()
+
         if show_end:
             self.visualizer.show(graph=self.graph)
             self.visualizer.show(graph=self.solution)

@@ -48,6 +48,50 @@ def test_data():
     assert bfs.solution.data.equals(expected)
 
 
+def test_data_end():
+    data = pd.read_csv('bfs-data.csv')
+    graph = Graph(data)
+    bfs = BFS(graph)
+    bfs.run('Frankfurt', end_vertex='Erfurt', show_end=True)
+
+    expected = pd.DataFrame(data=[
+        {'source': 'Würzburg', 'target': 'Erfurt'},
+        {'source': 'Frankfurt', 'target': 'Würzburg'}
+    ])
+
+    assert bfs.solution.data.equals(pd.DataFrame(expected))
+
+
+def test_data_missing_source():
+    data = pd.read_csv('bfs-data.csv')
+    graph = Graph(data, weight_cols=['weight_1'])
+    bfs = BFS(graph)
+    bfs.run('Random')
+    bfs.show()
+
+    assert bfs.solution.data.empty
+
+
+def test_data_missing_target():
+    data = pd.read_csv('bfs-data.csv')
+    graph = Graph(data, weight_cols=['weight_1'])
+    bfs = BFS(graph)
+    bfs.run('Frankfurt', 'Random')
+    bfs.show()
+
+    assert bfs.solution.data.empty
+
+
+def test_data_equal():
+    data = pd.read_csv('bfs-data.csv')
+    graph = Graph(data, weight_cols=['weight_1'])
+    bfs = BFS(graph)
+    bfs.run('Frankfurt', 'Frankfurt')
+    bfs.show()
+
+    assert bfs.solution.data.empty
+
+
 def test_data_dash():
     data = pd.read_csv('bfs-data.csv')
     graph = Graph(data, weight_cols=['weight_1'])
@@ -55,18 +99,18 @@ def test_data_dash():
     bfs.run('Frankfurt', show_end=True)
 
 
-def test_data_end():
-    data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data)
-    bfs = BFS(graph)
-    bfs.run('Frankfurt', end_vertex='Erfurt', show_end=True)
-
-
 def test_data_dash_end():
     data = pd.read_csv('bfs-data.csv')
     graph = Graph(data, weight_cols=['weight_1'])
     bfs = BFS(graph, visualizer=DashVisualizer())
     bfs.run('Frankfurt', end_vertex='Erfurt', show_end=True)
+
+
+def test_data_dash_equal():
+    data = pd.read_csv('bfs-data.csv')
+    graph = Graph(data, weight_cols=['weight_1'])
+    bfs = BFS(graph, visualizer=DashVisualizer())
+    bfs.run('Frankfurt', end_vertex='Frankfurt', show_end=True)
 
 
 def test_data_bidirectional_dash():
