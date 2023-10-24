@@ -44,35 +44,42 @@ class AStar(Algorithm):
         :return:
         """
         all_vertices = self.graph.get_all_vertices()
+        finished = False
 
-        open = {start_vertex}
-        prev = {}
+        if start_vertex in all_vertices and end_vertex in all_vertices and start_vertex != end_vertex:
+            open = {start_vertex}
+            prev = {}
 
-        h = {start_vertex: self.heuristic.calculate(start_vertex, end_vertex)}
-        g = {vertex: float("inf") if vertex != start_vertex else 0 for vertex in all_vertices}
-        f = {vertex: float("inf") if vertex != start_vertex else h[start_vertex] for vertex in all_vertices}
+            h = {start_vertex: self.heuristic.calculate(start_vertex, end_vertex)}
+            g = {vertex: float("inf") if vertex != start_vertex else 0 for vertex in all_vertices}
+            f = {vertex: float("inf") if vertex != start_vertex else h[start_vertex] for vertex in all_vertices}
 
-        self.graph.add_explored_vertex(start_vertex)
+            self.graph.add_explored_vertex(start_vertex)
 
-        while len(open) > 0:
-            open_f = {node:value for node,value in f.items() if node in open}
-            current = min(open_f, key=open_f.get)
-            if current == end_vertex:
-                self.solution = self.graph.get_path_informed(start_vertex, end_vertex, prev)
-                break
+            while len(open) > 0:
+                open_f = {node:value for node,value in f.items() if node in open}
+                current = min(open_f, key=open_f.get)
+                if current == end_vertex:
+                    self.solution = self.graph.get_path_informed(start_vertex, end_vertex, prev)
+                    finished = True
+                    break
 
-            open.remove(current)
-            for successor in self.graph.get_successors(current):
-                cost = next(iter(self.graph.get_weight(source=current, target=successor).values()))
-                g_cost = g[current] + cost
-                if g_cost < g[successor]:
-                    prev[successor] = current
-                    g[successor] = g_cost
-                    if successor not in h:
-                        h[successor] = self.heuristic.calculate(successor, end_vertex)
-                    f[successor] = g_cost + h[successor]
-                    if successor not in open:
-                        open.add(successor)
+                open.remove(current)
+                for successor in self.graph.get_successors(current):
+                    cost = next(iter(self.graph.get_weight(source=current, target=successor).values()))
+                    g_cost = g[current] + cost
+                    if g_cost < g[successor]:
+                        prev[successor] = current
+                        g[successor] = g_cost
+                        if successor not in h:
+                            h[successor] = self.heuristic.calculate(successor, end_vertex)
+                        f[successor] = g_cost + h[successor]
+                        if successor not in open:
+                            open.add(successor)
+
+        if not finished and end_vertex is not None:
+            print(f'Warning, could not find a path from {start_vertex} to {end_vertex}')
+            self.solution.data = pd.DataFrame()
 
         if show_end:
             self.visualizer.show(graph=self.graph)

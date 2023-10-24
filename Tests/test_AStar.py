@@ -35,6 +35,33 @@ def test_astar_bidirectional():
     assert a_star.solution.data.equals(pd.DataFrame(expected))
 
 
+def test_astar_missing_source():
+    data = pd.read_csv('astar-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    a_star = AStar(graph)
+    a_star.run(start_vertex='Random', end_vertex='f', show_end=True)
+
+    assert a_star.solution.data.empty
+
+
+def test_astar_missing_target():
+    data = pd.read_csv('astar-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    a_star = AStar(graph)
+    a_star.run(start_vertex='a', end_vertex='Random', show_end=True)
+
+    assert a_star.solution.data.empty
+
+
+def test_astar_equal():
+    data = pd.read_csv('astar-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    a_star = AStar(graph)
+    a_star.run(start_vertex='a', end_vertex='a', show_end=True)
+
+    assert a_star.solution.data.empty
+
+
 def test_astar_dash():
     data = pd.read_csv('astar-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
