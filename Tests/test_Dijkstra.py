@@ -40,6 +40,34 @@ def test_data_bidirectional_finish():
     assert bfs.solution.data.equals(expected)
 
 
+def test_data_missing_source():
+    data = pd.read_csv('dijkstra-data.csv')
+    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    bfs = Dijkstra(graph)
+    bfs.run(start_vertex='Random')
+    bfs.show()
+
+    assert bfs.solution.data.empty
+
+
+def test_data_missing_target():
+    data = pd.read_csv('dijkstra-data.csv')
+    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    bfs = Dijkstra(graph)
+    bfs.run(start_vertex='a', end_vertex='Random', show_end=True)
+
+    assert bfs.solution.data.empty
+
+
+def test_data_equal():
+    data = pd.read_csv('dijkstra-data.csv')
+    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    bfs = Dijkstra(graph)
+    bfs.run(start_vertex='a', end_vertex='a', show_end=True)
+
+    assert bfs.solution.data.empty
+
+
 def test_data_bidirectional_dash():
     data = pd.read_csv('dijkstra-data.csv')
     graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])

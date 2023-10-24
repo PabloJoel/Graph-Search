@@ -43,44 +43,53 @@ class Dijkstra(Algorithm):
         :param end_vertex:
         :return:
         """
-        # Initialize distances
-        dist = {vertex: float("inf") if vertex != 's' else 0 for vertex in self.graph.get_all_vertices()}
-        prev = {vertex: None for vertex in self.graph.get_all_vertices()}
-        unexplored_vertices = self.graph.get_unexplored_vertices()
-        current_vertex = start_vertex
+        all_vertices = self.graph.get_all_vertices()
+        finished = False
 
-        while len(unexplored_vertices) > 0:
-            self.graph.add_explored_vertex(current_vertex)
+        if start_vertex in all_vertices and start_vertex != end_vertex:
+            # Initialize distances
+            dist = {vertex: float("inf") if vertex != 's' else 0 for vertex in all_vertices}
+            prev = {vertex: None for vertex in all_vertices}
+            unexplored_vertices = all_vertices
+            current_vertex = start_vertex
 
-            if current_vertex == end_vertex:
-                self.solution = self.graph.get_path_informed(start_vertex, end_vertex, prev)
-                break
+            while len(unexplored_vertices) > 0:
+                self.graph.add_explored_vertex(current_vertex)
 
-            for successor in self.graph.get_successors(current_vertex):
-                # Calculate distance
-                current_dist = next(iter(self.graph.get_weight(source=current_vertex, target=successor).values()))      # Distance between current and successor
-                start_dist = 0 if dist[current_vertex] == float("inf") else dist[current_vertex]                        # Distance between current and start vertex
-                distance = current_dist + start_dist
+                if current_vertex == end_vertex:
+                    self.solution = self.graph.get_path_informed(start_vertex, end_vertex, prev)
+                    finished = True
+                    break
 
-                # Update min distances dictionary and solution graph
-                if distance < dist[successor]:
-                    predecessor = self.solution.get_predecessors(successor)
-                    if len(predecessor) > 0:
-                        self.solution.remove_edge(predecessor[0], successor)                                        # Remove old edge
-                    self.solution.add_edge(current_vertex, successor, {self.graph.weight_cols[0]: current_dist})    # Add new edge
-                    prev[successor] = current_vertex
-                    dist[successor] = distance                                                                      # Update min distance
+                for successor in self.graph.get_successors(current_vertex):
+                    # Calculate distance
+                    current_dist = next(iter(self.graph.get_weight(source=current_vertex, target=successor).values()))      # Distance between current and successor
+                    start_dist = 0 if dist[current_vertex] == float("inf") else dist[current_vertex]                        # Distance between current and start vertex
+                    distance = current_dist + start_dist
 
-            # Get the unexplored vertex with the min distance
-            unexplored_vertices = self.graph.get_unexplored_vertices()
-            min_dist = float("inf")
-            min_vertex = None
-            for unexplored_vertex in unexplored_vertices:
-                unexplored_dist = dist[unexplored_vertex]
-                if unexplored_dist < min_dist:
-                    min_dist = unexplored_dist
-                    min_vertex = unexplored_vertex
-            current_vertex = min_vertex
+                    # Update min distances dictionary and solution graph
+                    if distance < dist[successor]:
+                        predecessor = self.solution.get_predecessors(successor)
+                        if len(predecessor) > 0:
+                            self.solution.remove_edge(predecessor[0], successor)                                        # Remove old edge
+                        self.solution.add_edge(current_vertex, successor, {self.graph.weight_cols[0]: current_dist})    # Add new edge
+                        prev[successor] = current_vertex
+                        dist[successor] = distance                                                                      # Update min distance
+
+                # Get the unexplored vertex with the min distance
+                unexplored_vertices = self.graph.get_unexplored_vertices()
+                min_dist = float("inf")
+                min_vertex = None
+                for unexplored_vertex in unexplored_vertices:
+                    unexplored_dist = dist[unexplored_vertex]
+                    if unexplored_dist < min_dist:
+                        min_dist = unexplored_dist
+                        min_vertex = unexplored_vertex
+                current_vertex = min_vertex
+
+        if not finished and end_vertex is not None:
+            print(f'Warning, could not find a path to {end_vertex}')
+            self.solution.data = pd.DataFrame()
 
         if show_end:
             self.visualizer.show(graph=self.graph)
