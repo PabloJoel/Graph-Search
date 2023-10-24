@@ -28,6 +28,33 @@ def test_data():
     assert bfs.solution.data.equals(data)
 
 
+def test_data_missing_source():
+    data = pd.read_csv('dfs-data.csv')
+    graph = Graph(data)
+    bfs = DFS(graph)
+    bfs.run('a', show_end=True)
+
+    assert bfs.solution.data.empty
+
+
+def test_data_missing_target():
+    data = pd.read_csv('dfs-data.csv')
+    graph = Graph(data)
+    bfs = DFS(graph)
+    bfs.run(1, 'a', show_end=True)
+
+    assert bfs.solution.data.empty
+
+
+def test_data_equal():
+    data = pd.read_csv('dfs-data.csv')
+    graph = Graph(data)
+    bfs = DFS(graph)
+    bfs.run(1, 1, show_end=True)
+
+    assert bfs.solution.data.empty
+
+
 def test_data_bidirectional_dash():
     data = pd.read_csv('dfs-data.csv')
     graph = Graph(data, bidirectional=True)

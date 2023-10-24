@@ -44,7 +44,11 @@ class DFS(Algorithm):
         :param end_vertex:
         :return:
         """
-        self.__dfs_recursion(start_vertex, end_vertex, show_by_step, show_end)
+        found = self.__dfs_recursion(start_vertex, end_vertex, show_by_step, show_end)
+
+        if not found and end_vertex is not None:
+            print(f'Warning, could not find a path to {end_vertex}')
+            self.solution.data = pd.DataFrame()
 
         if show_end:
             self.visualizer.show(graph=self.graph)
