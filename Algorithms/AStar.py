@@ -66,7 +66,7 @@ class AStar(Algorithm):
 
                 open.remove(current)
                 for successor in self.graph.get_successors(current):
-                    cost = next(iter(self.graph.get_weight(source=current, target=successor).values()))
+                    cost = self.graph.get_weight(source=current, target=successor)[0]
                     g_cost = g[current] + cost
                     if g_cost < g[successor]:
                         prev[successor] = current

@@ -34,20 +34,22 @@ class Graph:
 
         self.explored_nodes = set()
 
-    def add_edge(self, source, target, weights=dict()):
+    def add_edge(self, source, target, weights=list()):
         """
         Add an edge from source to target to the graph. Optionally, a dict of weights can be added to the edge.
         :param str source: source vertex.
         :param str target:  target vertex.
-        :param dict weights: dict where keys are weight column names and values are the actual weights.
+        :param list weights: dict where keys are weight column names and values are the actual weights.
         :return:
         """
         data = {self.source_col: source, self.target_col: target}
 
         # Add weights
-        for weight_col in self.weight_cols:
-            if weight_col in weights:
-                data.update({weight_col: weights[weight_col]})
+        if len(self.weight_cols) != len(weights):
+            raise ValueError(f'The weights columns are {self.weight_cols}, but the weights added were {weights}, '
+                             f'which doesnt align with the number of columns')
+        for weight_col, weight_value in zip(self.weight_cols, weights):
+            data.update({weight_col: weight_value})
 
         # Duplicate edges if bidirectional
         if self.bidirectional:
@@ -118,9 +120,9 @@ class Graph:
         source = self.data[self.data[self.source_col]==source]
         source_target = source[source[self.target_col]==target]
         if source_target.empty:
-            return dict()
+            return list()
         else:
-            return source_target[self.weight_cols].to_dict('records')[0]
+            return list(source_target[self.weight_cols].iloc[0])
 
     def get_predecessors(self, vertex):
         """

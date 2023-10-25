@@ -63,7 +63,7 @@ class Dijkstra(Algorithm):
 
                 for successor in self.graph.get_successors(current_vertex):
                     # Calculate distance
-                    current_dist = next(iter(self.graph.get_weight(source=current_vertex, target=successor).values()))      # Distance between current and successor
+                    current_dist = self.graph.get_weight(source=current_vertex, target=successor)[0]                        # Distance between current and successor
                     start_dist = 0 if dist[current_vertex] == float("inf") else dist[current_vertex]                        # Distance between current and start vertex
                     distance = current_dist + start_dist
 
@@ -72,7 +72,7 @@ class Dijkstra(Algorithm):
                         predecessor = self.solution.get_predecessors(successor)
                         if len(predecessor) > 0:
                             self.solution.remove_edge(predecessor[0], successor)                                        # Remove old edge
-                        self.solution.add_edge(current_vertex, successor, {self.graph.weight_cols[0]: current_dist})    # Add new edge
+                        self.solution.add_edge(current_vertex, successor, [current_dist])    # Add new edge
                         prev[successor] = current_vertex
                         dist[successor] = distance                                                                      # Update min distance
 
