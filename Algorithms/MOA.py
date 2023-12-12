@@ -54,12 +54,12 @@ class MOA(Algorithm):
         all_vertices = self.graph.get_all_vertices()
         finished = False
         if start_vertex in all_vertices and len(end_vertices.intersection(all_vertices)) != 0 \
-                and end_vertices != {start_vertex}:#todo que ocurre si start=s y end=s,y1,y2??
+                and end_vertices != {start_vertex}:
             open = {start_vertex}
             closed = set()
             solution_costs, label = dict(), dict()
 
-            h = {start_vertex: self._get_nd_successors(start_vertex)}#todo do a correct heuristic
+            h = {start_vertex: self._get_nd_successors(start_vertex)}
             g = {vertex: [float("inf")] if vertex != start_vertex else [] for vertex in all_vertices}
             f = {vertex: [float("inf")] if vertex != start_vertex else h[start_vertex] for vertex in all_vertices}
 
@@ -93,7 +93,7 @@ class MOA(Algorithm):
                             solution_path = self.solution.copy()
                             self._backtrack_sol(g=g, vertex=solution, accrued_cost=cost, solution_path=solution_path, start_vertex=start_vertex)
                             solutions.append(solution_path)
-                    self.solution = solutions#todo multiple solutions
+                    self.solution = solutions
                     finished = True
                     break
                 else:
@@ -181,6 +181,9 @@ class MOA(Algorithm):
         if not finished and end_vertices is not None:
             print(f'Warning, could not find a path from {start_vertex} to {end_vertices}')
             self.solution.data = pd.DataFrame()
+
+        if isinstance(self.solution, Graph):
+            self.solution = [self.solution]
 
         if show_end:
             self.visualizer.show(graph=self.graph)

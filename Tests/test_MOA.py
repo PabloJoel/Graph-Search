@@ -67,6 +67,33 @@ def test_moa():
     assert solutions[2].data.equals(path3)
 
 
+def test_moa_missing_source():
+    data = pd.read_csv('moa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    moa = MOA(graph, heuristic=MockedHeuristic)
+    moa.run(start_vertex='df', end_vertices=['y1','y2','y3'], show_end=True)
+
+    assert moa.solution[0].data.empty
+
+
+def test_moa_missing_target():
+    data = pd.read_csv('moa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    moa = MOA(graph, heuristic=MockedHeuristic)
+    moa.run(start_vertex='s', end_vertices=['x','y'], show_end=True)
+
+    assert moa.solution[0].data.empty
+
+
+def test_moa_missing_equal():
+    data = pd.read_csv('moa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    moa = MOA(graph, heuristic=MockedHeuristic)
+    moa.run(start_vertex='s', end_vertices=['s'], show_end=True)
+
+    assert moa.solution[0].data.empty
+
+
 def test_moa_dash():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
