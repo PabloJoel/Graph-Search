@@ -219,6 +219,16 @@ class Graph:
                 current = source
         return path
 
+    def get_inverse_graph(self):
+        inverse_graph = pd.DataFrame()
+        if not self.data.empty:
+            inverse_graph[self.source_col] = self.data[self.target_col]
+            inverse_graph[self.target_col] = self.data[self.source_col]
+            for weigth_col in self.weight_cols:
+                inverse_graph[weigth_col] = self.data[weigth_col]
+        return Graph(inverse_graph, source_col=self.source_col, target_col=self.target_col,
+                     weight_cols=self.weight_cols, bidirectional=self.bidirectional)
+
     def copy(self):
         """
         Returns a copy of the graph.

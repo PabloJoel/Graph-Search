@@ -93,3 +93,23 @@ def test_remove_edge_nonexistant():
         {'source': 's', 'target': 't', 'weight_1': 1, 'weight_2': 2}
     ])
     assert graph.data.equals(expected)
+
+
+def test_inverse_graph():
+    data = pd.DataFrame()
+    graph = Graph(data=data, weight_cols=['weight_1','weight_2'])
+    graph.add_edge(source='s', target='t', weights=[1, 2])
+    inverse = graph.get_inverse_graph()
+
+    expected = pd.DataFrame(data=[
+        {'source': 't', 'target': 's', 'weight_1': 1, 'weight_2': 2}
+    ])
+    assert inverse.data.equals(expected)
+
+
+def test_inverse_graph2():
+    data = pd.DataFrame()
+    graph = Graph(data=data, weight_cols=['weight_1','weight_2'])
+    inverse = graph.get_inverse_graph()
+
+    assert inverse.data.empty

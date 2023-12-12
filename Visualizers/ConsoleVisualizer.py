@@ -9,5 +9,11 @@ class ConsoleVisualizer(Visualizer):
     def __init__(self):
         super().__init__()
 
-    def show(self, graph: Graph):
-        print(graph.data)
+    def show(self, graph):
+        if isinstance(graph, list):
+            for elem in graph:
+                print(elem.data)
+        elif isinstance(graph, Graph):
+            print(graph.data)
+        else:
+            raise TypeError(f"ConsoleVisualizer can only show Graph or list of Graph, not {type(graph)}")

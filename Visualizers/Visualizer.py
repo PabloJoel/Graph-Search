@@ -12,5 +12,5 @@ class Visualizer:
         pass
 
     @abstractmethod
-    def show(self, graph: Graph):
+    def show(self, graph):
         pass

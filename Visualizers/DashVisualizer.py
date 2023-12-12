@@ -76,10 +76,11 @@ class DashVisualizer(Visualizer):
         :param list elements: list of elements to be displayed on the Dash dashboard.
         :return:
         """
-        self.app.layout = html.Div([
-            cyto.Cytoscape(
-                id='cytoscape',
-                elements=elements,
+        res = list()
+        for index, element in enumerate(elements):
+            res.append(cyto.Cytoscape(
+                id=f'cytoscape-{index}-nodes',
+                elements=element,
                 stylesheet=[
                     {
                         'selector': 'node',
@@ -104,8 +105,8 @@ class DashVisualizer(Visualizer):
                 ],
                 layout={'name': 'breadthfirst'},
                 style={'width': '1400px', 'height': '1500px'}
-            )
-        ])
+            ))
+        self.app.layout = html.Div(res)
 
     def __run_dash(self):
         """
@@ -115,10 +116,18 @@ class DashVisualizer(Visualizer):
         """
         self.app.run(debug=False)
 
-    def show(self, graph: Graph):
+    def show(self, graph):
         """
         This method updates the Dash dashboard to show the current state of the graph.
         :return:
         """
-        dash_graph = self.__generate_dash_graph(graph.data)
-        self.__update_dash(dash_graph)
+        dash_vis = list()
+        if isinstance(graph, list):
+            for elem in graph:
+                dash_vis.append(self.__generate_dash_graph(elem.data))
+        elif isinstance(graph, Graph):
+            dash_vis.append(self.__generate_dash_graph(graph.data))
+        else:
+            raise TypeError(f"ConsoleVisualizer can only show Graph or list of Graph, not {type(graph)}")
+
+        self.__update_dash(dash_vis)
