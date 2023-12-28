@@ -101,16 +101,12 @@ class MOA(Algorithm):
                     # Step 2.2: Get the best vertex using a problem specific heuristic
                     goals_nd = [elem for elem in nd if elem in end_vertices]
                     if len(goals_nd) == 0:
-                        possibilities = nd
+                        possibilities = {vertex: self.heuristic.calculate(vertex) for vertex in nd}
                     else:
-                        possibilities = goals_nd
+                        possibilities = {vertex: self.heuristic.calculate(vertex) for vertex in goals_nd}
 
-                    n, best_h = None, None
-                    for vertex in possibilities:
-                        vertex_h = self.heuristic.calculate(vertex)
-                        if n is None or vertex_h < best_h:
-                            n = vertex
-                            best_h = vertex_h
+                    chosen_value = self._get_non_dm_subset(list(possibilities.values()))[0]
+                    n = [vertex for vertex,value in possibilities.items() if value == chosen_value][0]
 
                     open.remove(n)
                     closed.add(n)
