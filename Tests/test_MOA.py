@@ -12,28 +12,14 @@ class MockedHeuristic(Heuristic):
     def __init__(self, graph: Graph):
         super().__init__(graph)
 
-    def calculate(self, vertices):
+    def calculate(self, vertex):
         """
         Return a random vertex.
         :param start:
         :return:
         """
-        if len(vertices)==2 and '1' in vertices and '2' in vertices:
-            return '1'
-        elif len(vertices)==2 and '2' in vertices and '3' in vertices:
-            return '3'
-        elif len(vertices)==2 and '2' in vertices and '5' in vertices:
-            return '2'
-        elif len(vertices)==2 and '5' in vertices and '6' in vertices:
-            return '5'
-        elif len(vertices)==2 and '6' in vertices and '8' in vertices:
-            return '6'
-        elif len(vertices)==3 and '7' in vertices and '8' in vertices and '9' in vertices:
-            return '8'
-        if len(vertices) == 0:
-            raise ValueError(f"The vertices input is empty: {vertices}")
-        else:
-            return random.sample(vertices,1)[0]
+        heurs = {'s': -5, '1': 1, '2': 0, '3': 1, '4': -5, '5': -1, '6': -2, '7': -4, '8': -3, '9': -4, 'y1': 2, 'y2': 2, 'y3': 2}
+        return heurs[vertex]
 
 
 def test_moa():
@@ -45,15 +31,17 @@ def test_moa():
     path1 = pd.DataFrame(data=[
         {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2},
         {'source': '5', 'target': '8', 'weight_1': 1, 'weight_2': 1},
-        {'source': '1', 'target': '5', 'weight_1': 1, 'weight_2': 2},
-        {'source': 's', 'target': '1', 'weight_1': 1, 'weight_2': 2}
-    ])
-    path2 = pd.DataFrame(data=[
-        {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2},
-        {'source': '5', 'target': '8', 'weight_1': 1, 'weight_2': 1},
         {'source': '2', 'target': '5', 'weight_1': 2, 'weight_2': 1},
         {'source': 's', 'target': '2', 'weight_1': 3, 'weight_2': 1}
     ])
+
+    path2 = pd.DataFrame(data=[
+        {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2},
+        {'source': '5', 'target': '8', 'weight_1': 1, 'weight_2': 1},
+        {'source': '1', 'target': '5', 'weight_1': 1, 'weight_2': 2},
+        {'source': 's', 'target': '1', 'weight_1': 1, 'weight_2': 2}
+    ])
+
     path3 = pd.DataFrame(data=[
         {'source': '7', 'target': 'y1', 'weight_1': 1, 'weight_2': 4},
         {'source': '5', 'target': '7', 'weight_1': 1, 'weight_2': 3},

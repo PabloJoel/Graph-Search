@@ -101,9 +101,18 @@ class MOA(Algorithm):
                     # Step 2.2: Get the best vertex using a problem specific heuristic
                     goals_nd = [elem for elem in nd if elem in end_vertices]
                     if len(goals_nd) == 0:
-                        n = self.heuristic.calculate(nd)
+                        possibilities = nd
+                        #n = self.heuristic.calculate(nd, self)
                     else:
-                        n = self.heuristic.calculate(goals_nd)
+                        possibilities = goals_nd
+                        #n = self.heuristic.calculate(goals_nd)
+
+                    n, best_h = None, None
+                    for vertex in possibilities:
+                        vertex_h = self.heuristic.calculate(vertex)
+                        if n is None or vertex_h > best_h:
+                            n = vertex
+                            best_h = vertex_h
 
                     open.remove(n)
                     closed.add(n)
