@@ -102,15 +102,13 @@ class MOA(Algorithm):
                     goals_nd = [elem for elem in nd if elem in end_vertices]
                     if len(goals_nd) == 0:
                         possibilities = nd
-                        #n = self.heuristic.calculate(nd, self)
                     else:
                         possibilities = goals_nd
-                        #n = self.heuristic.calculate(goals_nd)
 
                     n, best_h = None, None
                     for vertex in possibilities:
                         vertex_h = self.heuristic.calculate(vertex)
-                        if n is None or vertex_h > best_h:
+                        if n is None or vertex_h < best_h:
                             n = vertex
                             best_h = vertex_h
 

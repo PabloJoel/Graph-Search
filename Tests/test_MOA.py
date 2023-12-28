@@ -18,7 +18,7 @@ class MockedHeuristic(Heuristic):
         :param start:
         :return:
         """
-        heurs = {'s': -5, '1': 1, '2': 0, '3': 1, '4': -5, '5': -1, '6': -2, '7': -4, '8': -3, '9': -4, 'y1': 2, 'y2': 2, 'y3': 2}
+        heurs = {'s': 5, '1': -1, '2': 0, '3': -1, '4': 5, '5': 1, '6': 2, '7': 4, '8': 3, '9': 4, 'y1': -2, 'y2': -2, 'y3': -2}
         return heurs[vertex]
 
 
@@ -31,15 +31,15 @@ def test_moa():
     path1 = pd.DataFrame(data=[
         {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2},
         {'source': '5', 'target': '8', 'weight_1': 1, 'weight_2': 1},
-        {'source': '2', 'target': '5', 'weight_1': 2, 'weight_2': 1},
-        {'source': 's', 'target': '2', 'weight_1': 3, 'weight_2': 1}
+        {'source': '1', 'target': '5', 'weight_1': 1, 'weight_2': 2},
+        {'source': 's', 'target': '1', 'weight_1': 1, 'weight_2': 2}
     ])
 
     path2 = pd.DataFrame(data=[
         {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2},
         {'source': '5', 'target': '8', 'weight_1': 1, 'weight_2': 1},
-        {'source': '1', 'target': '5', 'weight_1': 1, 'weight_2': 2},
-        {'source': 's', 'target': '1', 'weight_1': 1, 'weight_2': 2}
+        {'source': '2', 'target': '5', 'weight_1': 2, 'weight_2': 1},
+        {'source': 's', 'target': '2', 'weight_1': 3, 'weight_2': 1}
     ])
 
     path3 = pd.DataFrame(data=[
