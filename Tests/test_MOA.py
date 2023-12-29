@@ -1,31 +1,15 @@
 import pandas as pd
-import random
 
 from Graphs.Graph import Graph
 from Algorithms.MOA import MOA
 from Visualizers.DashVisualizer import DashVisualizer
-from Heuristics.Heuristic import Heuristic
-
-
-class MockedHeuristic(Heuristic):
-
-    def __init__(self, graph: Graph):
-        super().__init__(graph)
-
-    def calculate(self, vertex):
-        """
-        Return a random vertex.
-        :param start:
-        :return:
-        """
-        heurs = {'s': [5,5], '1': [-1,-1], '2': [0,0], '3': [-1,-1], '4': [5,5], '5': [1,1], '6': [2,2], '7': [4,4], '8': [3,3], '9': [4,4], 'y1': [-2,-2], 'y2': [-2,-2], 'y3': [-2,-2]}
-        return heurs[vertex]
+from Tests.heuristics import MockedHeuristicMOA, MockedHeuristicNAMOA
 
 
 def test_moa():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristic)
+    moa = MOA(graph, heuristic=MockedHeuristicMOA)
     moa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_end=True)
 
     path1 = pd.DataFrame(data=[
@@ -55,10 +39,35 @@ def test_moa():
     assert solutions[2].data.equals(path3)
 
 
+def test_moa2():
+    # using the NAMOA graph
+    data = pd.read_csv('namoa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    moa = MOA(graph, heuristic=MockedHeuristicNAMOA)
+    moa.run(start_vertex='s', end_vertices=['y'], show_end=True)
+
+    #todo falta este camino
+    path1 = pd.DataFrame(data=[
+        {'source': 'n4', 'target': 'y', 'weight_1': 1, 'weight_2': 5},
+        {'source': 'n2', 'target': 'n4', 'weight_1': 1, 'weight_2': 4},
+        {'source': 's', 'target': 'n2', 'weight_1': 2, 'weight_2': 1}
+    ])
+
+    path2 = pd.DataFrame(data=[
+        {'source': 'n5', 'target': 'y', 'weight_1': 1, 'weight_2': 1},
+        {'source': 'n2', 'target': 'n5', 'weight_1': 6, 'weight_2': 1},
+        {'source': 's', 'target': 'n2', 'weight_1': 2, 'weight_2': 1}
+    ])
+
+    solutions = moa.solution
+    assert solutions[0].data.equals(path1)
+    assert solutions[1].data.equals(path2)
+
+
 def test_moa_missing_source():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristic)
+    moa = MOA(graph, heuristic=MockedHeuristicMOA)
     moa.run(start_vertex='df', end_vertices=['y1','y2','y3'], show_end=True)
 
     assert moa.solution[0].data.empty
@@ -67,7 +76,7 @@ def test_moa_missing_source():
 def test_moa_missing_target():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristic)
+    moa = MOA(graph, heuristic=MockedHeuristicMOA)
     moa.run(start_vertex='s', end_vertices=['x','y'], show_end=True)
 
     assert moa.solution[0].data.empty
@@ -76,7 +85,7 @@ def test_moa_missing_target():
 def test_moa_missing_equal():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristic)
+    moa = MOA(graph, heuristic=MockedHeuristicMOA)
     moa.run(start_vertex='s', end_vertices=['s'], show_end=True)
 
     assert moa.solution[0].data.empty
@@ -85,7 +94,7 @@ def test_moa_missing_equal():
 def test_moa_dash():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristic, visualizer=DashVisualizer())
+    moa = MOA(graph, heuristic=MockedHeuristicMOA, visualizer=DashVisualizer())
     moa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_end=True)
 
     path1 = pd.DataFrame(data=[

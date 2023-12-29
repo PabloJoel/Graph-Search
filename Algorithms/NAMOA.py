@@ -71,7 +71,7 @@ class NAMOA(Algorithm):
                     for vertex, costs in costs_vertex.items():
                         for cost in costs:
                             solution_path = self.solution.copy()
-                            self._backtrack_sol(g=label, vertex=vertex, accrued_cost=cost, solution_path=solution_path,
+                            self._backtrack_sol(label=label, vertex=vertex, accrued_cost=cost, solution_path=solution_path,
                                                 start_vertex=start_vertex)
                             solutions.append(solution_path)
                     self.solution = solutions
@@ -301,17 +301,17 @@ class NAMOA(Algorithm):
             res.append(c1-c2)
         return res
 
-    def _backtrack_sol(self, g, vertex, accrued_cost, solution_path, start_vertex):
+    def _backtrack_sol(self, label, vertex, accrued_cost, solution_path, start_vertex):
         predecessors = self.graph.get_predecessors(vertex)
         for predecessor in predecessors:
             key = (predecessor,vertex)
             weight = self.graph.get_weight(predecessor, vertex)
-            if key in g and accrued_cost in g[key]:
+            if key in label and accrued_cost in label[key]:
                 substraction = self._substract_lists(accrued_cost, weight)
                 solution_path.add_edge(predecessor, vertex, weights=weight)
 
                 if predecessor != start_vertex:
-                    self._backtrack_sol(g, predecessor, substraction, solution_path, start_vertex)
+                    self._backtrack_sol(label, predecessor, substraction, solution_path, start_vertex)
 
                 return
 

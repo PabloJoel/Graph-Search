@@ -91,7 +91,7 @@ class MOA(Algorithm):
                     for solution, costs in solution_costs.items():
                         for cost in costs:
                             solution_path = self.solution.copy()
-                            self._backtrack_sol(g=g, vertex=solution, accrued_cost=cost, solution_path=solution_path, start_vertex=start_vertex)
+                            self._backtrack_sol(label=label, vertex=solution, accrued_cost=cost, solution_path=solution_path, start_vertex=start_vertex)
                             solutions.append(solution_path)
                     self.solution = solutions
                     finished = True
@@ -154,32 +154,35 @@ class MOA(Algorithm):
                                 open.add(successor)
                             else:   # Previously generated vertex
                                 if (n,successor) in label:
-                                    is_dominated = False
-                                    for cost in label[(n,successor)]:
-                                        if self.is_dominated(my_cost, cost):
-                                            is_dominated = True
+                                    updated = False
+                                    existing_path = label[(n,successor)]
+                                    for new_path in my_cost:
+                                        if not self.is_dominated(new_path, existing_path) and new_path not in existing_path:
+                                            updated = True
+                                            label[(n, successor)].append(new_path)
+                                            g[successor].append(new_path)
+                                            if successor in closed:
+                                                closed.remove(successor)
+                                                open.add(successor)
+                                    if updated:
+                                        label[(n, successor)] = self._get_non_dm_subset(label[(n, successor)])
+                                        g[successor] = self._get_nd_successors(g[successor])
 
-                                    if not is_dominated:
-                                        my_labels = label[(n,successor)]
-                                        for cost in label[(n,successor)]:
-                                            if self.is_dominated(cost, my_cost):
-                                                my_labels.remove(cost)
-                                        my_labels.append(my_cost)
+                                        if successor not in h:
+                                            h[successor] = self._get_nd_successors(successor)
 
-                                        if successor in closed:
-                                            closed.remove(successor)
-                                            open.add(successor)
+                                        f[successor] = self._get_non_dm_subset(self._add_costs(g[successor], h[successor]))
                                 else:
-                                    label[(n, successor)] = my_cost
+                                    label[(n, successor)] = self._get_non_dm_subset(my_cost)
 
-                                for cost in my_cost:
-                                    if not self.is_dominated(cost, g[successor]):
-                                        g[successor].append(cost)
+                                    for cost in my_cost:
+                                        if not self.is_dominated(cost, g[successor]):
+                                            g[successor].append(cost)
 
-                                if successor not in h:
-                                    h[successor] = self._get_nd_successors(successor)
+                                    if successor not in h:
+                                        h[successor] = self._get_nd_successors(successor)
 
-                                f[successor] = self._get_non_dm_subset(self._add_costs(g[successor], h[successor]))
+                                    f[successor] = self._get_non_dm_subset(self._add_costs(g[successor], h[successor]))
 
         if not finished and end_vertices is not None:
             print(f'Warning, could not find a path from {start_vertex} to {end_vertices}')
@@ -319,17 +322,18 @@ class MOA(Algorithm):
             res.append(c1-c2)
         return res
 
-    def _backtrack_sol(self, g, vertex, accrued_cost, solution_path, start_vertex):
+    def _backtrack_sol(self, label, vertex, accrued_cost, solution_path, start_vertex):
         predecessors = self.graph.get_predecessors(vertex)
         for predecessor in predecessors:
+            key = (predecessor,vertex)
             weight = self.graph.get_weight(predecessor, vertex)
-            substraction = self._substract_lists(accrued_cost, weight)
-            if substraction in g[predecessor]:
+            if key in label and accrued_cost in label[key]:
+                substraction = self._substract_lists(accrued_cost, weight)
                 solution_path.add_edge(predecessor, vertex, weights=weight)
-                self._backtrack_sol(g, predecessor, substraction, solution_path, start_vertex)
-                return
-            elif predecessor == start_vertex:
-                solution_path.add_edge(predecessor, vertex, weights=weight)
+
+                if predecessor != start_vertex:
+                    self._backtrack_sol(label, predecessor, substraction, solution_path, start_vertex)
+
                 return
 
 
