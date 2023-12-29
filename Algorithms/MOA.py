@@ -46,17 +46,12 @@ class MOA(Algorithm):
         :param str or list end_vertices:
         :return:
         """
-        if end_vertices is not None and isinstance(end_vertices, list):
-            end_vertices = set(end_vertices)
-        elif end_vertices is not None and not isinstance(end_vertices, set):
-            end_vertices = {end_vertices}
-
         all_vertices = self.graph.get_all_vertices()
         finished = False
-        if start_vertex in all_vertices and len(end_vertices.intersection(all_vertices)) != 0 \
-                and end_vertices != {start_vertex}:
-            open = {start_vertex}
-            closed = set()
+        if start_vertex in all_vertices and len([elem for elem in end_vertices if elem in all_vertices]) != 0 \
+                and end_vertices != [start_vertex]:
+            open = [start_vertex]
+            closed = list()
             solution_costs, label = dict(), dict()
 
             h = {start_vertex: self._get_nd_successors(start_vertex)}
@@ -109,7 +104,7 @@ class MOA(Algorithm):
                     n = [vertex for vertex,value in possibilities.items() if value == chosen_value][0]
 
                     open.remove(n)
-                    closed.add(n)
+                    closed.append(n)
 
                 if n in end_vertices:
                     # Step 4: Identify solution
@@ -151,7 +146,7 @@ class MOA(Algorithm):
 
                                 f[successor] = self._add_costs(g[successor], h[successor])
 
-                                open.add(successor)
+                                open.append(successor)
                             else:   # Previously generated vertex
                                 if (n,successor) in label:
                                     updated = False
@@ -163,10 +158,10 @@ class MOA(Algorithm):
                                             g[successor].append(new_path)
                                             if successor in closed:
                                                 closed.remove(successor)
-                                                open.add(successor)
+                                                open.append(successor)
                                     if updated:
                                         label[(n, successor)] = self._get_non_dm_subset(label[(n, successor)])
-                                        g[successor] = self._get_nd_successors(g[successor])
+                                        g[successor] = self._get_non_dm_subset(g[successor])
 
                                         if successor not in h:
                                             h[successor] = self._get_nd_successors(successor)
@@ -178,6 +173,7 @@ class MOA(Algorithm):
                                     for cost in my_cost:
                                         if not self.is_dominated(cost, g[successor]):
                                             g[successor].append(cost)
+                                    g[successor] = self._get_non_dm_subset(g[successor])
 
                                     if successor not in h:
                                         h[successor] = self._get_nd_successors(successor)

@@ -46,22 +46,17 @@ class NAMOA(Algorithm):
         :param str or list end_vertices:
         :return:
         """
-        if end_vertices is not None and isinstance(end_vertices, list):
-            end_vertices = set(end_vertices)
-        elif end_vertices is not None and not isinstance(end_vertices, set):
-            end_vertices = {end_vertices}
-
         all_vertices = self.graph.get_all_vertices()
         finished = False
-        if start_vertex in all_vertices and len(end_vertices.intersection(all_vertices)) != 0 \
-                and end_vertices != {start_vertex}:
+        if start_vertex in all_vertices and len([elem for elem in end_vertices if elem in all_vertices]) != 0 \
+                and end_vertices != [start_vertex]:
             h = {start_vertex: self.heuristic.calculate(start_vertex)}
             gclose = dict()
             gopen = {vertex: [float("inf")] if vertex != start_vertex else [] for vertex in all_vertices}
             f = {vertex: [float("inf")] if vertex != start_vertex else h[start_vertex] for vertex in all_vertices}
 
             open = [(start_vertex, gopen[start_vertex], f[start_vertex])]
-            goaln, costs, costs_vertex = set(), list(), dict()
+            goaln, costs, costs_vertex = list(), list(), dict()
             label = dict()
 
             while not finished:
@@ -100,7 +95,7 @@ class NAMOA(Algorithm):
                         break
 
                 if chosen_vertex in end_vertices:  # Step 4: Solution Recording
-                    goaln.add(chosen_vertex)
+                    goaln.append(chosen_vertex)
                     costs.extend(copy.deepcopy(chosen_gvertex))
                     if chosen_vertex in costs_vertex:
                         costs_vertex[chosen_vertex].extend(copy.deepcopy(chosen_gvertex))
