@@ -112,11 +112,13 @@ class MOA(Algorithm):
                     if len(values) > 0:
                         values = [subelem for elem in list(solution_costs.values()) for subelem in elem]
                     for my_cost in f[n]:
-                        if not self.is_dominated(my_cost, values):
+                        if not self.is_dominated(my_cost, values) and my_cost not in values:
                             if n in solution_costs:
                                 solution_costs[n].append(my_cost)
                             else:
                                 solution_costs.update({n: [my_cost]})
+                    if n in solution_costs:
+                        solution_costs[n] = self._get_non_dm_subset(solution_costs[n])
                 else:
                     # Step 5: Expand n and examine successors
                     successors = self.graph.get_successors(n)
@@ -170,9 +172,17 @@ class MOA(Algorithm):
                                 else:
                                     label[(n, successor)] = self._get_non_dm_subset(my_cost)
 
+                                    updated = False
                                     for cost in my_cost:
                                         if not self.is_dominated(cost, g[successor]):
+                                            updated = True
                                             g[successor].append(cost)
+
+                                    if updated and successor in closed:
+                                        closed.remove(successor)
+                                    if updated and successor not in open:
+                                        open.append(successor)
+
                                     g[successor] = self._get_non_dm_subset(g[successor])
 
                                     if successor not in h:

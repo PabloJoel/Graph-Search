@@ -46,7 +46,6 @@ def test_moa2():
     moa = MOA(graph, heuristic=MockedHeuristicNAMOA)
     moa.run(start_vertex='s', end_vertices=['y'], show_end=True)
 
-    #todo falta este camino
     path1 = pd.DataFrame(data=[
         {'source': 'n4', 'target': 'y', 'weight_1': 1, 'weight_2': 5},
         {'source': 'n2', 'target': 'n4', 'weight_1': 1, 'weight_2': 4},
