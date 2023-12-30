@@ -37,6 +37,7 @@ def test_namoa2():
     namoa = NAMOA(graph, heuristic=MockedHeuristicMOA)
     namoa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_end=True)
 
+    # cost: 6, 7
     path1 = pd.DataFrame(data=[
         {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2},
         {'source': '5', 'target': '8', 'weight_1': 1, 'weight_2': 1},
@@ -44,6 +45,7 @@ def test_namoa2():
         {'source': 's', 'target': '1', 'weight_1': 1, 'weight_2': 2}
     ])
 
+    # cost: 9, 5
     path2 = pd.DataFrame(data=[
         {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2},
         {'source': '5', 'target': '8', 'weight_1': 1, 'weight_2': 1},
@@ -51,6 +53,7 @@ def test_namoa2():
         {'source': 's', 'target': '2', 'weight_1': 3, 'weight_2': 1}
     ])
 
+    # cost: 4, 11
     path3 = pd.DataFrame(data=[
         {'source': '7', 'target': 'y1', 'weight_1': 1, 'weight_2': 4},
         {'source': '5', 'target': '7', 'weight_1': 1, 'weight_2': 3},
@@ -62,6 +65,7 @@ def test_namoa2():
     assert solutions[0].data.equals(path1)
     assert solutions[1].data.equals(path2)
     assert solutions[2].data.equals(path3)
+
 
 def test_namoa_missing_source():
     data = pd.read_csv('namoa-data.csv')

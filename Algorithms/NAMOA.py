@@ -46,6 +46,9 @@ class NAMOA(Algorithm):
         :param str or list end_vertices:
         :return:
         """
+        if not isinstance(end_vertices, list):
+            end_vertices = [end_vertices]
+
         all_vertices = self.graph.get_all_vertices()
         finished = False
         if start_vertex in all_vertices and len([elem for elem in end_vertices if elem in all_vertices]) != 0 \
@@ -95,20 +98,27 @@ class NAMOA(Algorithm):
                         break
 
                 if chosen_vertex in end_vertices:  # Step 4: Solution Recording
-                    goaln.append(chosen_vertex)
-                    costs.extend(copy.deepcopy(chosen_gvertex))
-                    if chosen_vertex in costs_vertex:
-                        costs_vertex[chosen_vertex].extend(copy.deepcopy(chosen_gvertex))
-                    else:
-                        costs_vertex[chosen_vertex] = copy.deepcopy(chosen_gvertex)
+                    for elem in chosen_gvertex:
+                        if not self.is_dominated(elem, costs):
+                            goaln.append(chosen_vertex)
+                            costs.extend(copy.deepcopy(chosen_gvertex))
+                            if chosen_vertex in costs_vertex:
+                                costs_vertex[chosen_vertex].extend(copy.deepcopy(chosen_gvertex))
+                            else:
+                                costs_vertex[chosen_vertex] = copy.deepcopy(chosen_gvertex)
 
-                    new_open = list()
-                    for elem in open:
-                        vertex, gvertex, fvertex = elem
-                        new_fvertex = self._sublist_nondominated_single(fvertex, chosen_gvertex)
-                        if len(new_fvertex) > 0:
-                            new_open.append((vertex, gvertex, new_fvertex))
-                    open = new_open
+                            new_open = list()
+                            for elem in open:
+                                vertex, gvertex, fvertex = elem
+                                new_gvertex = self._sublist_nondominated_single(gvertex, chosen_gvertex)
+                                if len(new_gvertex) > 0:
+                                    if vertex not in h:
+                                        h[vertex] = self.heuristic.calculate(vertex)
+
+                                    f[vertex] = self._add_costs(new_gvertex, h[vertex])
+                                    new_open.append((vertex, new_gvertex, f[vertex]))
+
+                            open = new_open
                 else:   # Step 5: Path Expansion
                     for successor in self.graph.get_successors(chosen_vertex):
                         gsucc = self._add_costs(self.graph.get_weight(chosen_vertex, successor), chosen_gvertex)   # Step A:
@@ -159,8 +169,12 @@ class NAMOA(Algorithm):
                                     gopen[successor].extend(copy.deepcopy(gsucc))
                                 else:
                                     gopen[successor] = copy.deepcopy(gsucc)
-                                label[(chosen_vertex, successor)] = copy.deepcopy(gsucc)
 
+                                if (chosen_vertex, successor) not in label:
+                                    label[(chosen_vertex, successor)] = copy.deepcopy(gsucc)
+                                else:
+                                    label[(chosen_vertex, successor)].extend(gsucc)
+                                    label[(chosen_vertex, successor)] = self._get_non_dm_subset(label[(chosen_vertex, successor)])
         if not finished and end_vertices is not None:
             print(f'Warning, could not find a path from {start_vertex} to {end_vertices}')
             self.solution.data = pd.DataFrame()
@@ -214,6 +228,13 @@ class NAMOA(Algorithm):
             elif (succ,elem,fsucc) in open:
                 open.remove((succ,elem,fsucc))
         return res
+
+    def _get_non_dm_subset(self, elements):
+        subset = list()
+        for elem in elements:
+            if not self.is_dominated(elem, elements):
+                subset.append(elem)
+        return subset
 
     def is_dominated(self, costs1, costs2):
         """

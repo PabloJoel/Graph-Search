@@ -46,6 +46,9 @@ class MOA(Algorithm):
         :param str or list end_vertices:
         :return:
         """
+        if not isinstance(end_vertices, list):
+            end_vertices = [end_vertices]
+
         all_vertices = self.graph.get_all_vertices()
         finished = False
         if start_vertex in all_vertices and len([elem for elem in end_vertices if elem in all_vertices]) != 0 \
