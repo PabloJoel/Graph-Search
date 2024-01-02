@@ -48,13 +48,14 @@ class Dijkstra(Algorithm):
 
         if start_vertex in all_vertices and start_vertex != end_vertex:
             # Initialize distances
-            dist = {vertex: float("inf") if vertex != 's' else 0 for vertex in all_vertices}
+            dist = {vertex: float("inf") if vertex != start_vertex else 0 for vertex in all_vertices}
             prev = {vertex: None for vertex in all_vertices}
-            unexplored_vertices = all_vertices
+            unexplored_vertices = {start_vertex}
             current_vertex = start_vertex
 
             while len(unexplored_vertices) > 0:
                 self.graph.add_explored_vertex(current_vertex)
+                unexplored_vertices.remove(current_vertex)
 
                 if current_vertex == end_vertex:
                     self.solution = self.graph.get_path_informed(start_vertex, end_vertex, prev)
@@ -62,6 +63,9 @@ class Dijkstra(Algorithm):
                     break
 
                 for successor in self.graph.get_successors(current_vertex):
+                    if not self.graph.is_explored(successor):
+                        unexplored_vertices.add(successor)
+
                     # Calculate distance
                     current_dist = self.graph.get_weight(source=current_vertex, target=successor)[0]                        # Distance between current and successor
                     start_dist = 0 if dist[current_vertex] == float("inf") else dist[current_vertex]                        # Distance between current and start vertex
@@ -77,12 +81,11 @@ class Dijkstra(Algorithm):
                         dist[successor] = distance                                                                      # Update min distance
 
                 # Get the unexplored vertex with the min distance
-                unexplored_vertices = self.graph.get_unexplored_vertices()
                 min_dist = float("inf")
                 min_vertex = None
                 for unexplored_vertex in unexplored_vertices:
                     unexplored_dist = dist[unexplored_vertex]
-                    if unexplored_dist < min_dist:
+                    if unexplored_dist < min_dist or min_vertex is None:
                         min_dist = unexplored_dist
                         min_vertex = unexplored_vertex
                 current_vertex = min_vertex
