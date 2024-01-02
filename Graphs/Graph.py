@@ -19,7 +19,7 @@ class Graph:
         self.data = data
         self.source_col = source_col
         self.target_col = target_col
-        self.weight_cols = weight_cols
+        self.weight_cols = weight_cols if isinstance(weight_cols, list) or isinstance(weight_cols, set) else [weight_cols]
         self.bidirectional = bidirectional
 
         if bidirectional and not data.empty:
