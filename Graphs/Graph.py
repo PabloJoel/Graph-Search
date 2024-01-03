@@ -165,13 +165,13 @@ class Graph:
         :param end: end vertex
         :return:
         """
-        cost = {weight: 0 for weight in self.weight_cols}
+        cost = [0 for weight in self.weight_cols]
         node = end
         while node != start:
             predecessor = self.get_predecessors(node)[0]
             weight = self.get_weight(predecessor, node)
-            for col, value in weight.items():
-                cost[col] += value
+            for index, value in enumerate(weight):
+                cost[index] += value
             node = predecessor
         return cost
 
@@ -209,7 +209,6 @@ class Graph:
         while not path_ready:
             source = prev[current]
             target = current
-            #cost = next(iter(self.get_weight(source=source, target=target).values()))
             cost = self.get_weight(source=source, target=target)
             path.add_edge(source=source, target=target, weights=cost)
 

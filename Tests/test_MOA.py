@@ -38,6 +38,10 @@ def test_moa():
     assert solutions[1].data.equals(path2)
     assert solutions[2].data.equals(path3)
 
+    assert solutions[0].get_path_cost(start='s', end='y3') == [6,7]
+    assert solutions[1].get_path_cost(start='s', end='y3') == [9,5]
+    assert solutions[2].get_path_cost(start='s', end='y1') == [4,11]
+
 
 def test_moa2():
     # using the NAMOA graph
@@ -61,6 +65,9 @@ def test_moa2():
     solutions = moa.solution
     assert solutions[0].data.equals(path1)
     assert solutions[1].data.equals(path2)
+
+    assert solutions[0].get_path_cost(start='s', end='y') == [4,10]
+    assert solutions[1].get_path_cost(start='s', end='y') == [9,3]
 
 
 def test_moa_missing_source():

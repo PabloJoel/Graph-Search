@@ -19,6 +19,12 @@ def test_astar():
 
     assert a_star.solution.data.equals(pd.DataFrame(expected))
 
+    assert a_star.solution.get_path_cost(start='a', end='f') == [10]
+    assert a_star.solution.get_path_cost(start='a', end='c') == [3]
+    assert a_star.solution.get_path_cost(start='a', end='d') == [9]
+    assert a_star.solution.get_path_cost(start='c', end='d') == [6]
+    assert a_star.solution.get_path_cost(start='c', end='f') == [7]
+
 
 def test_astar_bidirectional():
     data = pd.read_csv('astar-data.csv')
