@@ -42,7 +42,6 @@ class BFS(Algorithm):
         queue.append(start_vertex)
         self.graph.add_explored_vertex(start_vertex)
 
-        all_vertices = self.graph.get_all_vertices()
         solution = Graph(
             data=pd.DataFrame(),
             source_col=self.graph.source_col,
