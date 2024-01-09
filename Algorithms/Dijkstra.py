@@ -20,14 +20,8 @@ class Dijkstra(Algorithm):
         :param Graph graph: input graph containing the data.
         :param Visualizer visualizer: visualizer implementation to visualize the graphs. By default: ConsoleVisualizer.
         """
-        solution = Graph(
-            data=pd.DataFrame(),
-            source_col=graph.source_col,
-            target_col=graph.target_col,
-            weight_cols=graph.weight_cols,
-            bidirectional=False
-        )
-        super().__init__(graph, solution, visualizer)
+
+        super().__init__(graph, visualizer)
 
     def step(self):
         """
@@ -46,6 +40,14 @@ class Dijkstra(Algorithm):
         all_vertices = self.graph.get_all_vertices()
         finished = False
 
+        solution = Graph(
+            data=pd.DataFrame(),
+            source_col=self.graph.source_col,
+            target_col=self.graph.target_col,
+            weight_cols=self.graph.weight_cols,
+            bidirectional=False
+        )
+
         if start_vertex in all_vertices and start_vertex != end_vertex:
             # Initialize distances
             dist = {vertex: float("inf") if vertex != start_vertex else 0 for vertex in all_vertices}
@@ -58,7 +60,7 @@ class Dijkstra(Algorithm):
                 unexplored_vertices.remove(current_vertex)
 
                 if current_vertex == end_vertex:
-                    self.solution = self.graph.get_path_informed(start_vertex, end_vertex, prev)
+                    self.solution.add_solution(end_vertex, self.graph.get_path_informed(start_vertex, end_vertex, prev))
                     finished = True
                     break
 
@@ -73,10 +75,10 @@ class Dijkstra(Algorithm):
 
                     # Update min distances dictionary and solution graph
                     if distance < dist[successor]:
-                        predecessor = self.solution.get_predecessors(successor)
+                        predecessor = solution.get_predecessors(successor)
                         if len(predecessor) > 0:
-                            self.solution.remove_edge(predecessor[0], successor)                                        # Remove old edge
-                        self.solution.add_edge(current_vertex, successor, [current_dist])    # Add new edge
+                            solution.remove_edge(predecessor[0], successor)                                        # Remove old edge
+                        solution.add_edge(current_vertex, successor, [current_dist])    # Add new edge
                         prev[successor] = current_vertex
                         dist[successor] = distance                                                                      # Update min distance
 
@@ -90,13 +92,16 @@ class Dijkstra(Algorithm):
                         min_vertex = unexplored_vertex
                 current_vertex = min_vertex
 
+        if len(self.solution.get_all_solutions()) == 0 and len(solution.data) > 0 and end_vertex is None:
+            self.solution.add_solution('*', solution)
+
         if not finished and end_vertex is not None:
             print(f'Warning, could not find a path to {end_vertex}')
-            self.solution.data = pd.DataFrame()
 
         if show_end:
             self.visualizer.show(graph=self.graph)
-            self.visualizer.show(graph=self.solution)
+            for solution in self.solution.get_all_solutions():
+                self.visualizer.show(graph=solution)
 
 
 

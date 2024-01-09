@@ -20,14 +20,14 @@ def test_data_bidirectional():
         {'source': 'f', 'target': 'c', 'weight_1': 3}
     ])
 
-    assert dijkstra.solution.data.equals(expected)
+    assert dijkstra.solution.get_solution('*')[0].data.equals(expected)
 
-    assert dijkstra.solution.get_path_cost(start='a', end='a') == [0]
-    assert dijkstra.solution.get_path_cost(start='a', end='b') == [2]
-    assert dijkstra.solution.get_path_cost(start='a', end='c') == [12]
-    assert dijkstra.solution.get_path_cost(start='a', end='d') == [7]
-    assert dijkstra.solution.get_path_cost(start='a', end='e') == [8]
-    assert dijkstra.solution.get_path_cost(start='a', end='f') == [9]
+    assert dijkstra.solution.get_solution('a')[0].get_path_cost(start='a', end='a') == [0]
+    assert dijkstra.solution.get_solution('b')[0].get_path_cost(start='a', end='b') == [2]
+    assert dijkstra.solution.get_solution('c')[0].get_path_cost(start='a', end='c') == [12]
+    assert dijkstra.solution.get_solution('d')[0].get_path_cost(start='a', end='d') == [7]
+    assert dijkstra.solution.get_solution('e')[0].get_path_cost(start='a', end='e') == [8]
+    assert dijkstra.solution.get_solution('f')[0].get_path_cost(start='a', end='f') == [9]
 
 
 def test_data_bidirectional_finish():
@@ -43,7 +43,9 @@ def test_data_bidirectional_finish():
         {'source': 'a', 'target': 'b', 'weight_1': 2}
     ])
 
-    assert dijkstra.solution.data.equals(expected)
+    assert dijkstra.solution.get_solution('c')[0].data.equals(expected)
+
+    assert dijkstra.solution.get_solution('c')[0].get_path_cost(start='a', end='c') == [12]
 
 
 def test_data_missing_source():
@@ -53,7 +55,7 @@ def test_data_missing_source():
     dijkstra.run(start_vertex='Random')
     dijkstra.show()
 
-    assert dijkstra.solution.data.empty
+    assert dijkstra.solution.get_solution('Random') is None
 
 
 def test_data_missing_target():
@@ -62,7 +64,7 @@ def test_data_missing_target():
     dijkstra = Dijkstra(graph)
     dijkstra.run(start_vertex='a', end_vertex='Random', show_end=True)
 
-    assert dijkstra.solution.data.empty
+    assert dijkstra.solution.get_solution('Random') is None
 
 
 def test_data_equal():
@@ -71,7 +73,7 @@ def test_data_equal():
     dijkstra = Dijkstra(graph)
     dijkstra.run(start_vertex='a', end_vertex='a', show_end=True)
 
-    assert dijkstra.solution.data.empty
+    assert dijkstra.solution.get_solution('a') is None
 
 
 def test_data_bidirectional_dash():
