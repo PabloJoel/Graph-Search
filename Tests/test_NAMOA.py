@@ -26,11 +26,11 @@ def test_namoa():
     ])
 
     solutions = namoa.solution
-    assert solutions[0].data.equals(path1)
-    assert solutions[1].data.equals(path2)
+    assert solutions.get_solution('y')[0].data.equals(path1)
+    assert solutions.get_solution('y')[1].data.equals(path2)
 
-    assert solutions[0].get_path_cost(start='s', end='y') == [4,10]
-    assert solutions[1].get_path_cost(start='s', end='y') == [9,3]
+    assert solutions.get_solution('y')[0].get_path_cost(start='s', end='y') == [4,10]
+    assert solutions.get_solution('y')[1].get_path_cost(start='s', end='y') == [9,3]
 
 
 def test_namoa2():
@@ -65,13 +65,13 @@ def test_namoa2():
     ])
 
     solutions = namoa.solution
-    assert solutions[0].data.equals(path1)
-    assert solutions[1].data.equals(path2)
-    assert solutions[2].data.equals(path3)
+    assert solutions.get_solution('y3')[0].data.equals(path1)
+    assert solutions.get_solution('y3')[1].data.equals(path2)
+    assert solutions.get_solution('y1')[0].data.equals(path3)
 
-    assert solutions[0].get_path_cost(start='s', end='y3') == [6,7]
-    assert solutions[1].get_path_cost(start='s', end='y3') == [9,5]
-    assert solutions[2].get_path_cost(start='s', end='y1') == [4,11]
+    assert solutions.get_solution('y3')[0].get_path_cost(start='s', end='y3') == [6,7]
+    assert solutions.get_solution('y3')[1].get_path_cost(start='s', end='y3') == [9,5]
+    assert solutions.get_solution('y1')[0].get_path_cost(start='s', end='y1') == [4,11]
 
 
 def test_namoa_missing_source():
@@ -80,7 +80,7 @@ def test_namoa_missing_source():
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA)
     namoa.run(start_vertex='fg', end_vertices='y', show_end=True)
 
-    assert namoa.solution[0].data.empty
+    assert namoa.solution.get_solution('y') is None
 
 
 def test_namoa_missing_target():
@@ -89,7 +89,7 @@ def test_namoa_missing_target():
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA)
     namoa.run(start_vertex='s', end_vertices='fdgh', show_end=True)
 
-    assert namoa.solution[0].data.empty
+    assert namoa.solution.get_solution('fdgh') is None
 
 
 def test_namoa_missing_equal():
@@ -98,7 +98,7 @@ def test_namoa_missing_equal():
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA)
     namoa.run(start_vertex='s', end_vertices='s', show_end=True)
 
-    assert namoa.solution[0].data.empty
+    assert namoa.solution.get_solution('s') is None
 
 
 def test_namoa_dash():
@@ -107,18 +107,3 @@ def test_namoa_dash():
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA, visualizer=DashVisualizer())
     namoa.run(start_vertex='s', end_vertices='y', show_end=True)
 
-    path1 = pd.DataFrame(data=[
-        {'source': 'n4', 'target': 'y', 'weight_1': 1, 'weight_2': 5},
-        {'source': 'n2', 'target': 'n4', 'weight_1': 1, 'weight_2': 4},
-        {'source': 's', 'target': 'n2', 'weight_1': 2, 'weight_2': 1}
-    ])
-
-    path2 = pd.DataFrame(data=[
-        {'source': 'n5', 'target': 'y', 'weight_1': 1, 'weight_2': 1},
-        {'source': 'n2', 'target': 'n5', 'weight_1': 6, 'weight_2': 1},
-        {'source': 's', 'target': 'n2', 'weight_1': 2, 'weight_2': 1}
-    ])
-
-    solutions = namoa.solution
-    assert solutions[0].data.equals(path1)
-    assert solutions[1].data.equals(path2)
