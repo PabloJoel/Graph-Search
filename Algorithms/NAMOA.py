@@ -22,14 +22,8 @@ class NAMOA(Algorithm):
         :param Visualizer visualizer: visualizer implementation to visualize the graphs. By default: ConsoleVisualizer.
         :param heuristic: heuristic function to be used. By default: BFS Heuristic.
         """
-        solution = Graph(
-            data=pd.DataFrame(),
-            source_col=graph.source_col,
-            target_col=graph.target_col,
-            weight_cols=graph.weight_cols,
-            bidirectional=graph.bidirectional
-        )
-        super().__init__(graph, solution, visualizer)
+
+        super().__init__(graph, visualizer)
         self.heuristic = heuristic(graph)
 
     def step(self):
@@ -46,6 +40,14 @@ class NAMOA(Algorithm):
         :param str or list end_vertices:
         :return:
         """
+        solution_template = Graph(
+            data=pd.DataFrame(),
+            source_col=self.graph.source_col,
+            target_col=self.graph.target_col,
+            weight_cols=self.graph.weight_cols,
+            bidirectional=self.graph.bidirectional
+        )
+
         if not isinstance(end_vertices, list):
             end_vertices = [end_vertices]
 
@@ -68,11 +70,10 @@ class NAMOA(Algorithm):
                     solutions = list()
                     for vertex, costs in costs_vertex.items():
                         for cost in costs:
-                            solution_path = self.solution.copy()
+                            solution_path = solution_template.copy()
                             self._backtrack_sol(label=label, vertex=vertex, accrued_cost=cost, solution_path=solution_path,
                                                 start_vertex=start_vertex)
-                            solutions.append(solution_path)
-                    self.solution = solutions
+                            self.solution.add_solution(vertex, solution_path)
                     finished = True
                     break
 
@@ -177,14 +178,11 @@ class NAMOA(Algorithm):
                                     label[(chosen_vertex, successor)] = self._get_non_dm_subset(label[(chosen_vertex, successor)])
         if not finished and end_vertices is not None:
             print(f'Warning, could not find a path from {start_vertex} to {end_vertices}')
-            self.solution.data = pd.DataFrame()
-
-        if isinstance(self.solution, Graph):
-            self.solution = [self.solution]
 
         if show_end:
             self.visualizer.show(graph=self.graph)
-            self.visualizer.show(graph=self.solution)
+            for solution in self.solution.get_all_solutions():
+                self.visualizer.show(graph=solution)  # todo change it to add graph, otherwise it overwrites
 
     def _in_gopen_or_gclose(self, gsucc, gopen, gclose, successor):
         for elem in gsucc:
