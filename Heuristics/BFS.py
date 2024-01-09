@@ -20,7 +20,9 @@ class BFS(Heuristic):
         else:
             bfs = BFSAlgorithm(self.graph)
             bfs.run(start, end)
-            if bfs.solution.data.empty:
-                return float('inf')
+            solution = bfs.solution.get_solution(end)
+            if solution is not None and len(solution) > 0 and len(solution[0].data) > 0:
+                return len(solution[0].get_path_uninformed(start, end).data)
             else:
-                return len(bfs.solution.get_path_uninformed(start, end).data)
+                return float('inf')
+

@@ -19,14 +19,8 @@ class AStar(Algorithm):
         :param Visualizer visualizer: visualizer implementation to visualize the graphs. By default: ConsoleVisualizer.
         :param heuristic: heuristic function to be used. By default: BFS Heuristic.
         """
-        solution = Graph(
-            data=pd.DataFrame(),
-            source_col=graph.source_col,
-            target_col=graph.target_col,
-            weight_cols=graph.weight_cols,
-            bidirectional=graph.bidirectional
-        )
-        super().__init__(graph, solution, visualizer)
+
+        super().__init__(graph, visualizer)
         self.heuristic = heuristic(graph)
 
     def step(self):
@@ -60,7 +54,7 @@ class AStar(Algorithm):
                 open_f = {node:value for node,value in f.items() if node in open}
                 current = min(open_f, key=open_f.get)
                 if current == end_vertex:
-                    self.solution = self.graph.get_path_informed(start_vertex, end_vertex, prev)
+                    self.solution.add_solution(end_vertex, self.graph.get_path_informed(start_vertex, end_vertex, prev))
                     finished = True
                     break
 
@@ -79,11 +73,11 @@ class AStar(Algorithm):
 
         if not finished and end_vertex is not None:
             print(f'Warning, could not find a path from {start_vertex} to {end_vertex}')
-            self.solution.data = pd.DataFrame()
 
         if show_end:
             self.visualizer.show(graph=self.graph)
-            self.visualizer.show(graph=self.solution)
+            for solution in self.solution.get_all_solutions():
+                self.visualizer.show(graph=solution)
 
 
 
