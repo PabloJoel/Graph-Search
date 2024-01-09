@@ -2,6 +2,7 @@ from abc import abstractmethod
 
 from Graphs.Graph import Graph
 from Visualizers.Visualizer import Visualizer
+from Solution.Solution import Solution
 
 
 class Algorithm:
@@ -9,14 +10,14 @@ class Algorithm:
     Algorithm is the interface to use to implement Algorithms. It defines the needed methods that any algorithm should
     contain.
     """
-    def __init__(self, graph: Graph, solution: Graph, visualizer: Visualizer):
+    def __init__(self, graph: Graph, visualizer: Visualizer):
         """
         :param Graph graph: input graph containing the data for the algorithm.
         :param Graph solution: output graph that will contain the result of the algorithm.
         :param Visualizer visualizer: specific Visualizer implementation to visualize the class.
         """
         self.graph = graph.copy()
-        self.solution = solution.copy()
+        self.solution = Solution()
         self.visualizer = visualizer
 
     def show(self):
@@ -25,7 +26,8 @@ class Algorithm:
         :return:
         """
         self.graph.show()
-        self.solution.show()
+        for solution in self.solution.get_all_solutions():
+            solution.show()
 
     @abstractmethod
     def step(self):
