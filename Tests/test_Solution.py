@@ -53,3 +53,16 @@ def test_mult_obj():
     assert solution.get_solution('v2') == [2, 1]
 
     assert solution.get_all_solutions() == [1, 2, 2, 1, 5, 5]
+
+
+def test_set_sol():
+    solution = Solution()
+
+    solution.add_solution('v1', 1)
+    assert solution.get_solution('v1') == [1]
+
+    solution.add_solution('v1', 2)
+    assert solution.get_solution('v1') == [1, 2]
+
+    solution.set_solution('v1', 5)
+    assert solution.get_solution('v1') == [5]

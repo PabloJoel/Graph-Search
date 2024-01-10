@@ -10,7 +10,10 @@ class Solution:
         if vertex in self._solutions:
             self._solutions[vertex].append(solution)
         else:
-            self._solutions[vertex] = [solution]
+            self.set_solution(vertex, solution)
+
+    def set_solution(self, vertex: str, solution: Graph):
+        self._solutions[vertex] = [solution]
 
     def get_solution(self, vertex: str):
         if vertex in self._solutions:
