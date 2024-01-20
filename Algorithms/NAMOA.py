@@ -67,7 +67,6 @@ class NAMOA(Algorithm):
             while not finished:
                 # Step 2: Check Termination
                 if len(open) == 0:
-                    solutions = list()
                     for vertex, costs in costs_vertex.items():
                         for cost in costs:
                             solution_path = solution_template.copy()
