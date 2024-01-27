@@ -48,6 +48,36 @@ def test_data_bidirectional_finish():
     assert dijkstra.solution.get_solution('c')[0].get_path_cost(start='a', end='c') == [12]
 
 
+def test_namoa_inverse():
+    graph = Graph(data=pd.read_csv('namoa-data.csv'), weight_cols=['weight_1', 'weight_2'])
+    visualizer = DashVisualizer()
+
+    inverse_graph = graph.get_inverse_graph()
+    inverse_graph_c = inverse_graph
+    inverse_graph_t = inverse_graph.copy()
+
+    inverse_graph_c.weight_cols = ['weight_1']
+    inverse_graph_t.weight_cols = ['weight_2']
+
+    dijkstra_c = Dijkstra(inverse_graph_c)
+    dijkstra_c.run(start_vertex='y')
+    inverse_c_sol = dijkstra_c.solution
+    c_graph = inverse_c_sol.get_solution('*')[0]
+    c_graph.weight_cols = ['weight_1', 'weight_2']
+    c_graph.data['weight_2'] = c_graph.data.apply(
+        lambda data: graph.get_weight(data[graph.target_col], data[graph.source_col])[1], axis=1)
+    visualizer.show(graph=c_graph)
+
+    dijkstra_t = Dijkstra(inverse_graph_t)
+    dijkstra_t.run(start_vertex='y')
+    inverse_t_sol = dijkstra_t.solution
+    t_graph = inverse_t_sol.get_solution('*')[0]
+    t_graph.weight_cols = ['weight_1', 'weight_2']
+    t_graph.data['weight_1'] = t_graph.data.apply(
+        lambda data: graph.get_weight(data[graph.target_col], data[graph.source_col])[0], axis=1)
+    visualizer.show(graph=t_graph)
+
+
 def test_data_missing_source():
     data = pd.read_csv('dijkstra-data.csv')
     graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
