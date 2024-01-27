@@ -160,16 +160,16 @@ class BDijkstra(Algorithm):
         )
 
         all_vertices = self.graph.get_all_vertices()
-        self.start_vertex = start_vertex
-        self.heap = Heap()
-        self.L = {vertex: list() for vertex in all_vertices}
-        self.d1 = {vertex: float('inf') if vertex != start_vertex else 0 for vertex in all_vertices}
-        self.d2 = {vertex: float('inf') if vertex != start_vertex else 0 for vertex in all_vertices}
-
-        ls = (start_vertex, self.d1[start_vertex], self.d2[start_vertex], None)
-        self.heap.push(ls)
 
         if start_vertex in all_vertices and end_vertex in all_vertices and start_vertex != end_vertex:
+            self.start_vertex = start_vertex
+            self.heap = Heap()
+            self.L = {vertex: list() for vertex in all_vertices}
+            self.d1 = {vertex: float('inf') if vertex != start_vertex else 0 for vertex in all_vertices}
+            self.d2 = {vertex: float('inf') if vertex != start_vertex else 0 for vertex in all_vertices}
+
+            ls = (start_vertex, self.d1[start_vertex], self.d2[start_vertex], None)
+            self.heap.push(ls)
 
             while self.heap.size() > 0:
                 l_star = self.heap.pop()

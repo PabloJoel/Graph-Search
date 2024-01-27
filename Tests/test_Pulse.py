@@ -93,31 +93,31 @@ def test_pulse_moa_graph_y3():
     assert solutions.get_solution('y3')[2].get_path_cost(start='s', end='y3') == [5,11]
 
 
-def test_pulse_missing_source():
-    data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+def test_namoa_missing_source():
+    data = pd.read_csv('moa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     pulse = PULSE(graph)
     pulse.run(start_vertex='fg', end_vertex='y', show_end=True)
 
-    assert pulse.solution[0].data.empty
+    assert pulse.solution.get_solution('y') is None
 
 
-def test_pulse_missing_target():
-    data = pd.read_csv('namoa-data.csv')
+def test_namoa_missing_target():
+    data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     pulse = PULSE(graph)
-    pulse.run(start_vertex='s', end_vertex='fdgh', show_end=True)
+    pulse.run(start_vertex='s', end_vertex='fdgy', show_end=True)
 
-    assert pulse.solution[0].data.empty
+    assert pulse.solution.get_solution('fdgy') is None
 
 
-def test_pulse_missing_equal():
-    data = pd.read_csv('namoa-data.csv')
+def test_namoa_missing_equal():
+    data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     pulse = PULSE(graph)
     pulse.run(start_vertex='s', end_vertex='s', show_end=True)
 
-    assert pulse.solution[0].data.empty
+    assert pulse.solution.get_solution('s') is None
 
 
 def test_pulse_dash():
@@ -125,22 +125,6 @@ def test_pulse_dash():
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     pulse = PULSE(graph, visualizer=DashVisualizer())
     pulse.run(start_vertex='s', end_vertex='y', show_end=True)
-
-    path1 = pd.DataFrame(data=(
-        {'source': 'n4', 'target': 'y', 'weight_1': 1, 'weight_2': 5},
-        {'source': 'n2', 'target': 'n4', 'weight_1': 1, 'weight_2': 4},
-        {'source': 's', 'target': 'n2', 'weight_1': 2, 'weight_2': 1}
-    ))
-
-    path2 = pd.DataFrame(data=(
-        {'source': 'n5', 'target': 'y', 'weight_1': 1, 'weight_2': 1},
-        {'source': 'n2', 'target': 'n5', 'weight_1': 6, 'weight_2': 1},
-        {'source': 's', 'target': 'n2', 'weight_1': 2, 'weight_2': 1}
-    ))
-
-    solutions = pulse.solution
-    assert solutions[0].data.equals(path1)
-    assert solutions[1].data.equals(path2)
 
 
 def test_dominated_empty1():

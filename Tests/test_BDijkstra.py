@@ -2,6 +2,7 @@ import pandas as pd
 
 from Graphs.Graph import Graph
 from Algorithms.BDijkstra import Heap, BDijkstra
+from Visualizers.DashVisualizer import DashVisualizer
 
 
 def heap_verification(heap_object):
@@ -146,3 +147,37 @@ def test_BDijkstra_moa_graph_y1():
     solutions = bdijkstra.solution
     assert solutions.get_solution('y1')[0].data.equals(path1)
     assert solutions.get_solution('y1')[0].get_path_cost(start='s', end='y1') == [4,11]
+
+
+def test_namoa_missing_source():
+    data = pd.read_csv('moa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    bdijkstra = BDijkstra(graph)
+    bdijkstra.run(start_vertex='fg', end_vertex='y', show_end=True)
+
+    assert bdijkstra.solution.get_solution('y') is None
+
+
+def test_namoa_missing_target():
+    data = pd.read_csv('moa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    bdijkstra = BDijkstra(graph)
+    bdijkstra.run(start_vertex='s', end_vertex='fdgy', show_end=True)
+
+    assert bdijkstra.solution.get_solution('fdgy') is None
+
+
+def test_namoa_missing_equal():
+    data = pd.read_csv('moa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    bdijkstra = BDijkstra(graph)
+    bdijkstra.run(start_vertex='s', end_vertex='s', show_end=True)
+
+    assert bdijkstra.solution.get_solution('s') is None
+
+
+def test_pulse_dash():
+    data = pd.read_csv('namoa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    bdijkstra = BDijkstra(graph, visualizer=DashVisualizer())
+    bdijkstra.run(start_vertex='s', end_vertex='y', show_end=True)
