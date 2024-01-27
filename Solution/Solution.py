@@ -23,3 +23,6 @@ class Solution:
 
     def get_all_solutions(self):
         return [subelem for elem in list(self._solutions.values()) for subelem in elem]
+
+    def is_empty(self):
+        return len(self._solutions) == 0
