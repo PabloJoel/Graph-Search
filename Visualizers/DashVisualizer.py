@@ -28,20 +28,20 @@ class DashVisualizer(Visualizer):
         self.thread = threading.Thread(target=self.__run_dash)
         self.thread.start()  # Run the Dash server on the background
 
-    def __generate_dash_graph(self, data):
+    def __generate_dash_graph(self, graph):
         """
         Internal method that converts a pandas dataframe (representing a Graph) into a list that can be ingested by
         Dash to create a visualization of the graph.
 
-        :param pd.DataFrame data: pandas DataFrame containing the graph details.
+        :param Graph graph: graph object to visualize.
         :return:
         """
         self.vertices = set()
-        elements = data.apply(self.__create_graph, axis=1)
+        elements = graph.data.apply(self.__create_graph, weight_cols=graph.weight_cols, axis=1)
         elements = [item for sublist in elements for item in sublist]
         return elements
 
-    def __create_graph(self, row):
+    def __create_graph(self, row, weight_cols):
         """
         Internal method that transforms the data from a single row of the dataframe into a list containing: the source
         vertex, the target vertex and the edge linking both vertices. Repeated vertices are not duplicated.
@@ -62,9 +62,7 @@ class DashVisualizer(Visualizer):
             self.vertices.add(row['target'])
 
         # Edge from Source to Target
-        pattern = re.compile('weight.*')
-        weight_columns = list(filter(pattern.match, row.keys()))
-        weight = '(' + ','.join([str(row[weight]) for weight in weight_columns]) + ')'
+        weight = '(' + ','.join([str(row[weight]) for weight in weight_cols]) + ')'
         res.append({'data': {'source': row['source'], 'target': row['target'], 'weight': weight}, 'type': 'edge'})          # Edge
 
         return res
@@ -124,9 +122,9 @@ class DashVisualizer(Visualizer):
         dash_vis = list()
         if isinstance(graph, list):
             for elem in graph:
-                dash_vis.append(self.__generate_dash_graph(elem.data))
+                dash_vis.append(self.__generate_dash_graph(elem))
         elif isinstance(graph, Graph):
-            dash_vis.append(self.__generate_dash_graph(graph.data))
+            dash_vis.append(self.__generate_dash_graph(graph))
         else:
             raise TypeError(f"ConsoleVisualizer can only show Graph or list of Graph, not {type(graph)}")
 
