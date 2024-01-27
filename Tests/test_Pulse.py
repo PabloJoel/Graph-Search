@@ -58,12 +58,13 @@ def test_pulse_moa_graph_y3():
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     pulse = PULSE(graph)
     pulse.run(start_vertex='s', end_vertex='y3', show_end=True)
+
     # cost: 6, 7
     path1 = pd.DataFrame(data=[
         {'source': 's', 'target': '1', 'weight_1': 1, 'weight_2': 2},
         {'source': '1', 'target': '5', 'weight_1': 1, 'weight_2': 2},
         {'source': '5', 'target': '8', 'weight_1': 1, 'weight_2': 1},
-        {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2}
+        {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2},
     ])
 
     # cost: 9, 5
@@ -71,15 +72,25 @@ def test_pulse_moa_graph_y3():
         {'source': 's', 'target': '2', 'weight_1': 3, 'weight_2': 1},
         {'source': '2', 'target': '5', 'weight_1': 2, 'weight_2': 1},
         {'source': '5', 'target': '8', 'weight_1': 1, 'weight_2': 1},
-        {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2}
+        {'source': '8', 'target': 'y3', 'weight_1': 3, 'weight_2': 2},
+    ])
+
+    # cost: 5, 11
+    path3 = pd.DataFrame(data=[
+        {'source': 's', 'target': '3', 'weight_1': 1, 'weight_2': 3},
+        {'source': '3', 'target': '6', 'weight_1': 1, 'weight_2': 2},
+        {'source': '6', 'target': '9', 'weight_1': 2, 'weight_2': 4},
+        {'source': '9', 'target': 'y3', 'weight_1': 1, 'weight_2': 2}
     ])
 
     solutions = pulse.solution
     assert solutions.get_solution('y3')[0].data.equals(path1)
     assert solutions.get_solution('y3')[1].data.equals(path2)
+    assert solutions.get_solution('y3')[2].data.equals(path3)
 
     assert solutions.get_solution('y3')[0].get_path_cost(start='s', end='y3') == [6,7]
     assert solutions.get_solution('y3')[1].get_path_cost(start='s', end='y3') == [9,5]
+    assert solutions.get_solution('y3')[2].get_path_cost(start='s', end='y3') == [5,11]
 
 
 def test_pulse_missing_source():
