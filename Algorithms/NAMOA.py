@@ -180,8 +180,7 @@ class NAMOA(Algorithm):
 
         if show_end:
             self.visualizer.show(graph=self.graph)
-            for solution in self.solution.get_all_solutions():
-                self.visualizer.show(graph=solution)  # todo change it to add graph, otherwise it overwrites
+            self.visualizer.show(graph=self.solution.get_all_solutions())
 
     def _in_gopen_or_gclose(self, gsucc, gopen, gclose, successor):
         for elem in gsucc:

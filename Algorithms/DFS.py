@@ -23,6 +23,9 @@ class DFS(Algorithm):
 
         super().__init__(graph, visualizer)
 
+        # Algorithm Parameters
+        self.explored_vertices = set()
+
     def step(self):
         """
         Run one step of the algorithm.
@@ -37,7 +40,9 @@ class DFS(Algorithm):
         :param end_vertex:
         :return:
         """
-        solution = Graph(
+        self.explored_vertices = set()
+
+        solution_template = Graph(
             data=pd.DataFrame(),
             source_col=self.graph.source_col,
             target_col=self.graph.target_col,
@@ -45,32 +50,32 @@ class DFS(Algorithm):
             weight_cols=self.graph.weight_cols
         )
 
-        found = self.__dfs_recursion(start_vertex, solution, end_vertex, show_by_step, show_end)
+        found = self.__dfs_recursion(start_vertex, solution_template, end_vertex, show_by_step, show_end)
 
-        if found and end_vertex is not None and not solution.data.empty:
-            self.solution.add_solution(end_vertex, solution)
+        if found and end_vertex is not None and not solution_template.data.empty:
+            self.solution.add_solution(end_vertex, solution_template)
 
-        if len(self.solution.get_all_solutions()) == 0 and len(solution.data) > 0 and end_vertex is None and not solution.data.empty:
-            self.solution.add_solution('*', solution)
+        if len(self.solution.get_all_solutions()) == 0 and len(solution_template.data) > 0 and end_vertex is None and not solution_template.data.empty:
+            self.solution.add_solution('*', solution_template)
 
         if not found and end_vertex is not None:
             print(f'Warning, could not find a path to {end_vertex}')
 
         if show_end:
             self.visualizer.show(graph=self.graph)
-            for solution in self.solution.get_all_solutions():
-                self.visualizer.show(graph=solution)
+            self.visualizer.show(graph=self.solution.get_all_solutions())
 
-    def __dfs_recursion(self, start_vertex, solution, end_vertex=None, show_by_step=False, show_end=False):
-        self.graph.add_explored_vertex(start_vertex)
+    def __dfs_recursion(self, start_vertex, solution_template, end_vertex=None, show_by_step=False, show_end=False):
+        self.explored_vertices.add(start_vertex)
+
         if start_vertex == end_vertex:
             return True
 
         for successor in self.graph.get_successors(start_vertex):
-            if not self.graph.is_explored(successor):
+            if successor not in self.explored_vertices:
                 weight = self.graph.get_weight(start_vertex, successor)
-                solution.add_edge(start_vertex, successor, weight)
-                finished = self.__dfs_recursion(successor, solution, end_vertex, show_by_step, show_end)
+                solution_template.add_edge(start_vertex, successor, weight)
+                finished = self.__dfs_recursion(successor, solution_template, end_vertex, show_by_step, show_end)
                 if finished:
                     return True
         return False

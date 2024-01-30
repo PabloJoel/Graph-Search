@@ -73,8 +73,7 @@ class PULSE(Algorithm):
 
         if show_end:
             self.visualizer.show(graph=self.graph)
-            for solution in self.solution.get_all_solutions():
-                self.visualizer.show(graph=solution)  # todo change it to add graph, otherwise it overwrites
+            self.visualizer.show(graph=self.solution.get_all_solutions())
 
     def _initialization(self, end_vertex):
         self._create_inverse_graph(self.graph, end_vertex)

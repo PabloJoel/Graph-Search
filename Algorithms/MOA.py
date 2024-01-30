@@ -198,8 +198,7 @@ class MOA(Algorithm):
 
         if show_end:
             self.visualizer.show(graph=self.graph)
-            for solution in self.solution.get_all_solutions():
-                self.visualizer.show(graph=solution)#todo change it to add graph, otherwise it overwrites
+            self.visualizer.show(graph=self.solution.get_all_solutions())
 
     def is_dominated(self, costs1, costs2):
         """

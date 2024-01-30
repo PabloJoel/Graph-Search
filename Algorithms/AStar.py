@@ -38,6 +38,7 @@ class AStar(Algorithm):
         :return:
         """
         all_vertices = self.graph.get_all_vertices()
+        explored_vertices = set()
         finished = False
 
         if start_vertex in all_vertices and end_vertex in all_vertices and start_vertex != end_vertex:
@@ -48,7 +49,7 @@ class AStar(Algorithm):
             g = {vertex: float("inf") if vertex != start_vertex else 0 for vertex in all_vertices}
             f = {vertex: float("inf") if vertex != start_vertex else h[start_vertex] for vertex in all_vertices}
 
-            self.graph.add_explored_vertex(start_vertex)
+            explored_vertices.add(start_vertex)
 
             while len(open) > 0:
                 open_f = {node:value for node,value in f.items() if node in open}
@@ -76,8 +77,7 @@ class AStar(Algorithm):
 
         if show_end:
             self.visualizer.show(graph=self.graph)
-            for solution in self.solution.get_all_solutions():
-                self.visualizer.show(graph=solution)
+            self.visualizer.show(graph=self.solution.get_all_solutions())
 
 
 

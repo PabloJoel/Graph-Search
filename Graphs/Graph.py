@@ -32,8 +32,6 @@ class Graph:
             self.data.reset_index(drop=True, inplace=True)
             del bidirectional_df
 
-        self.explored_nodes = set()
-
     def add_edge(self, source, target, weights=list()):
         """
         Add an edge from source to target to the graph. Optionally, a dict of weights can be added to the edge.
@@ -74,37 +72,6 @@ class Graph:
             self.data.drop(self.data[(self.data[self.source_col] == source) & (self.data[self.target_col] == target)].index, inplace=True)
             if self.bidirectional:
                 self.data.drop(self.data[(self.data[self.source_col] == target) & (self.data[self.target_col] == source)].index, inplace=True)
-
-    def is_explored(self, vertex):
-        """
-        Returns True if the vertex has been marked as explored, otherwise False.
-        :param str vertex: vertex to be checked.
-        :return:
-        """
-        return vertex in self.explored_nodes
-
-    def add_explored_vertex(self, vertex):
-        """
-        Marks a vertex as explored.
-        :param str vertex: vertex to be marked.
-        :return:
-        """
-        self.explored_nodes.add(vertex)
-
-    def get_explored_vertices(self):
-        """
-        Returns all explored vertices.
-        :return:
-        """
-        return self.explored_nodes
-
-    def get_unexplored_vertices(self):
-        """
-        Returns all unexplored vertices.
-        :return:
-        """
-        all_vertices = self.get_all_vertices()
-        return {vertex for vertex in all_vertices if not self.is_explored(vertex)}
 
     def get_weight(self, source, target):
         """
@@ -219,6 +186,10 @@ class Graph:
         return path
 
     def get_inverse_graph(self):
+        """
+        Returns a copy of the graph but the edges have been inverted.
+        :return:
+        """
         inverse_graph = pd.DataFrame()
         if not self.data.empty:
             inverse_graph[self.source_col] = self.data[self.target_col]

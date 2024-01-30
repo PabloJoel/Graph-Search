@@ -40,7 +40,8 @@ class BFS(Algorithm):
         """
         queue = deque()
         queue.append(start_vertex)
-        self.graph.add_explored_vertex(start_vertex)
+        explored_vertices = set()
+        explored_vertices.add(start_vertex)
 
         solution = Graph(
             data=pd.DataFrame(),
@@ -58,8 +59,8 @@ class BFS(Algorithm):
                 self.solution.add_solution(end_vertex, solution.get_path_uninformed(start_vertex, end_vertex))
             else:
                 for successor in self.graph.get_successors(node):
-                    if not self.graph.is_explored(successor):
-                        self.graph.add_explored_vertex(successor)
+                    if successor not in explored_vertices:
+                        explored_vertices.add(successor)
                         queue.append(successor)
                         weight = self.graph.get_weight(node, successor)
                         solution.add_edge(node, successor, weights=weight)
@@ -72,8 +73,7 @@ class BFS(Algorithm):
 
         if show_end:
             self.visualizer.show(graph=self.graph)
-            for solution in self.solution.get_all_solutions():
-                self.visualizer.show(graph=solution)
+            self.visualizer.show(graph=self.solution.get_all_solutions())
 
 
 

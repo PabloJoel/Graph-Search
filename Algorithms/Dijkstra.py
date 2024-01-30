@@ -38,6 +38,7 @@ class Dijkstra(Algorithm):
         :return:
         """
         all_vertices = self.graph.get_all_vertices()
+        explored_vertices = set()
         finished = False
 
         solution = Graph(
@@ -56,7 +57,7 @@ class Dijkstra(Algorithm):
             current_vertex = start_vertex
 
             while len(unexplored_vertices) > 0:
-                self.graph.add_explored_vertex(current_vertex)
+                explored_vertices.add(current_vertex)
                 unexplored_vertices.remove(current_vertex)
 
                 if current_vertex == end_vertex:
@@ -65,7 +66,7 @@ class Dijkstra(Algorithm):
                     break
 
                 for successor in self.graph.get_successors(current_vertex):
-                    if not self.graph.is_explored(successor):
+                    if successor not in explored_vertices:
                         unexplored_vertices.add(successor)
 
                     # Calculate distance
@@ -100,8 +101,7 @@ class Dijkstra(Algorithm):
 
         if show_end:
             self.visualizer.show(graph=self.graph)
-            for solution in self.solution.get_all_solutions():
-                self.visualizer.show(graph=solution)
+            self.visualizer.show(graph=self.solution.get_all_solutions())
 
 
 
