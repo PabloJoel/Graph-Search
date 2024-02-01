@@ -222,7 +222,6 @@ class BDijkstra(Algorithm):
                     # non dominated label
                     self.d1[successor] = l_star[1] + c1
                     self.d2[successor] = l_star[2] + c2
-                    pos = [index for index,elem in enumerate(self.L[vertex]) if elem == l_star][0]
                     lnew = (successor, self.d1[successor], self.d2[successor], vertex)
                     if not self.heap.contains_vertex(lnew[0]):
                         self.heap.push(lnew)
