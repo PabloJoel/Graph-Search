@@ -38,7 +38,6 @@ class AStar(Algorithm):
         :return:
         """
         all_vertices = self.graph.get_all_vertices()
-        explored_vertices = set()
         finished = False
 
         if start_vertex in all_vertices and end_vertex in all_vertices and start_vertex != end_vertex:
@@ -48,8 +47,6 @@ class AStar(Algorithm):
             h = {start_vertex: self.heuristic.calculate(start_vertex, end_vertex)}
             g = {vertex: float("inf") if vertex != start_vertex else 0 for vertex in all_vertices}
             f = {vertex: float("inf") if vertex != start_vertex else h[start_vertex] for vertex in all_vertices}
-
-            explored_vertices.add(start_vertex)
 
             while len(open) > 0:
                 open_f = {node:value for node,value in f.items() if node in open}
