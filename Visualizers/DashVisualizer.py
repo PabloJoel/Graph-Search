@@ -22,11 +22,25 @@ def update_button(n_clicks):
     return 'Executing the algorithm...'
 
 
+@callback(
+    Output('main-div', 'children'),
+    Input('interval-component', 'n_intervals')
+)
+def update_layout(n):
+
+    return DashVisualizer.dash_elements
+
+
+#todo utilizar callback para refrescar la pagina
+#todo meter la visualizacion de close, open y current
+
+
 class DashVisualizer(Visualizer):
     """
     DashVisualizer is a type of visualizer that creates a Dash dashboard, where the graph is going to be displayed
     and updated.
     """
+    dash_elements = list()
 
     def __init__(self):
         """
@@ -35,7 +49,6 @@ class DashVisualizer(Visualizer):
         :param pd.DataFrame data: pandas DataFrame containing the graph details.
         """
         super().__init__()
-        self.elements = list()
 
         self.app = Dash(__name__)
         self.thread = threading.Thread(target=self.__run_dash)
@@ -50,12 +63,12 @@ class DashVisualizer(Visualizer):
         :return:
         """
         self.vertices = set()
-        elements = graph.data.apply(self.__create_graph, weight_cols=graph.weight_cols, axis=1)
-        elements = [item for sublist in elements for item in sublist]
+        graph_elements = graph.data.apply(self.__create_graph, weight_cols=graph.weight_cols, axis=1)
+        graph_elements = [item for sublist in graph_elements for item in sublist]
 
         return cyto.Cytoscape(
-            id=f'cytoscape-{len(self.elements)}-nodes',
-            elements=elements,
+            id=f'cytoscape-{len(DashVisualizer.dash_elements)}-nodes',
+            elements=graph_elements,
             stylesheet=[
                 {
                     'selector': 'node',
@@ -109,8 +122,14 @@ class DashVisualizer(Visualizer):
         return res
 
     def __generate_dash_button(self):
-        return [html.Button('Continue', id='update_button'),
-                html.Div(id='container-button-basic', children='Press the button to continue the execution')]
+        return [
+            self.__generate_dash_interval(),
+            html.Button('Continue', id='update_button'),
+            html.Div(id='container-button-basic', children='Press the button to continue the execution')
+        ]
+
+    def __generate_dash_interval(self):
+        return dcc.Interval(id='interval-component', interval=1000, n_intervals=0)
 
     def __generate_dash_graph_step(self, graph, current, open=list(), close=list()):
         """
@@ -121,9 +140,9 @@ class DashVisualizer(Visualizer):
         :return:
         """
         self.vertices = set()
-        elements = graph.data.apply(self.__create_graph_step, current=current, open=open, close=close, weight_cols=graph.weight_cols, axis=1)
-        elements = [item for sublist in elements for item in sublist]
-        return elements
+        graph_elements = graph.data.apply(self.__create_graph_step, current=current, open=open, close=close, weight_cols=graph.weight_cols, axis=1)
+        graph_elements = [item for sublist in graph_elements for item in sublist]
+        return graph_elements
 
     def __create_graph_step(self, row, current, open, close, weight_cols):
         """
@@ -158,7 +177,7 @@ class DashVisualizer(Visualizer):
         :param list elements: list of elements to be displayed on the Dash dashboard.
         :return:
         """
-        self.app.layout = html.Div(elements)
+        self.app.layout = html.Div(id='main-div', children=elements)
 
     def __run_dash(self):
         """
@@ -169,10 +188,10 @@ class DashVisualizer(Visualizer):
         self.app.run(debug=False)
 
     def wait(self, graph, current, open=list(), close=list()):
-        self.elements = list()
-        self.elements.extend(self.__generate_dash_button())
-        self.elements.append(self.__generate_dash_graph(graph))
-        self.__update_dash(self.elements)
+        DashVisualizer.dash_elements = list()
+        DashVisualizer.dash_elements.extend(self.__generate_dash_button())
+        DashVisualizer.dash_elements.append(self.__generate_dash_graph(graph))
+        self.__update_dash(DashVisualizer.dash_elements)
 
         event_lock.wait()
 
@@ -181,10 +200,13 @@ class DashVisualizer(Visualizer):
         This method updates the Dash dashboard to show the current state of the graph.
         :return:
         """
+        if not (len(DashVisualizer.dash_elements) > 0 and isinstance(DashVisualizer.dash_elements[0], dcc.Interval)):
+            DashVisualizer.dash_elements.append(self.__generate_dash_interval())
+
         if isinstance(graph, Graph):
             graph = [graph]
 
         for elem in graph:
-            self.elements.append(self.__generate_dash_graph(elem))
+            DashVisualizer.dash_elements.append(self.__generate_dash_graph(elem))
 
-        self.__update_dash(self.elements)
+        self.__update_dash(DashVisualizer.dash_elements)
