@@ -78,3 +78,10 @@ def test_astar_bidirectional_dash():
     graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
     a_star = AStar(graph, visualizer=DashVisualizer())
     a_star.run(start_vertex='a', end_vertex='f', show_end=True)
+
+
+def test_astar_dash_by_step():
+    data = pd.read_csv('astar-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    a_star = AStar(graph, visualizer=DashVisualizer())
+    a_star.run(start_vertex='a', end_vertex='f', show_by_step=True, show_end=True)

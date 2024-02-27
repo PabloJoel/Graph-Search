@@ -42,6 +42,7 @@ class AStar(Algorithm):
 
         if start_vertex in all_vertices and end_vertex in all_vertices and start_vertex != end_vertex:
             open = {start_vertex}
+            closed = set()
             prev = {}
 
             h = {start_vertex: self.heuristic.calculate(start_vertex, end_vertex)}
@@ -51,12 +52,17 @@ class AStar(Algorithm):
             while len(open) > 0:
                 open_f = {node:value for node,value in f.items() if node in open}
                 current = min(open_f, key=open_f.get)
+
+                if show_by_step:
+                    self.visualizer.wait(graph=self.graph, current=current, open=open, close=closed)
+
                 if current == end_vertex:
                     self.solution.add_solution(end_vertex, self.graph.get_path_informed(start_vertex, end_vertex, prev))
                     finished = True
                     break
 
                 open.remove(current)
+                closed.add(current)
                 for successor in self.graph.get_successors(current):
                     cost = self.graph.get_weight(source=current, target=successor)[0]
                     g_cost = g[current] + cost

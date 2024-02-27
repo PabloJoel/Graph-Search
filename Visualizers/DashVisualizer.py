@@ -27,11 +27,20 @@ def update_button(n_clicks):
     Input('interval-component', 'n_intervals')
 )
 def update_layout(n):
+    if DashVisualizer.dash_show_flag and DashVisualizer.dash_show_flag_done:
+        for elem in DashVisualizer.dash_elements:
+            if isinstance(elem, cyto.Cytoscape):
+                pass
+                #DashVisualizer.dash_elements[1].layout['name'] = 'preset'
+        DashVisualizer.dash_show_flag = False
+        DashVisualizer.dash_show_flag_done = False
+
+    if DashVisualizer.dash_show_flag:
+        DashVisualizer.dash_show_flag_done = True
 
     return DashVisualizer.dash_elements
 
-
-#todo utilizar callback para refrescar la pagina
+#todo ver si puedo pillar las posiciones de los nodos, setearlos y marcar el layout como preset
 #todo meter la visualizacion de close, open y current
 
 
@@ -41,6 +50,9 @@ class DashVisualizer(Visualizer):
     and updated.
     """
     dash_elements = list()
+    dash_show_flag = False
+    dash_show_flag_done = False
+    dash_wait_flag = False
 
     def __init__(self):
         """
@@ -54,7 +66,7 @@ class DashVisualizer(Visualizer):
         self.thread = threading.Thread(target=self.__run_dash)
         self.thread.start()  # Run the Dash server on the background
 
-    def __generate_dash_graph(self, graph):
+    def __generate_dash_graph(self, graph, current=None, open=list(), close=list()):
         """
         Internal method that converts a pandas dataframe (representing a Graph) into a list that can be ingested by
         Dash to create a visualization of the graph.
@@ -63,7 +75,8 @@ class DashVisualizer(Visualizer):
         :return:
         """
         self.vertices = set()
-        graph_elements = graph.data.apply(self.__create_graph, weight_cols=graph.weight_cols, axis=1)
+        graph_elements = graph.data.apply(self.__create_graph, weight_cols=graph.weight_cols, current=current,
+                                          open=open, close=close, axis=1)
         graph_elements = [item for sublist in graph_elements for item in sublist]
 
         return cyto.Cytoscape(
@@ -83,8 +96,16 @@ class DashVisualizer(Visualizer):
                     }
                 },
                 {
-                    'selector': '.selected',
+                    'selector': '.open',
+                    'style': {'background-color': 'green'}
+                },
+                {
+                    'selector': '.close',
                     'style': {'background-color': 'red'}
+                },
+                {
+                    'selector': '.current',
+                    'style': {'background-color': 'yellow'}
                 },
                 {
                     'selector': '.unselected',
@@ -95,7 +116,7 @@ class DashVisualizer(Visualizer):
             style={'width': '1400px', 'height': '1500px'}
         )
 
-    def __create_graph(self, row, weight_cols):
+    def __create_graph(self, row, weight_cols, current=None, open=list(), close=list()):
         """
         Internal method that transforms the data from a single row of the dataframe into a list containing: the source
         vertex, the target vertex and the edge linking both vertices. Repeated vertices are not duplicated.
@@ -107,12 +128,14 @@ class DashVisualizer(Visualizer):
 
         # Source vertex
         if row['source'] not in self.vertices:
-            res.append({'data': {'id': row['source'], 'label': row['source']}, 'type': 'node', 'classes': 'unselected'})    # Source vertex
+            node_class = self.__get_node_class(node=row['source'], current=current, open=open, close=close)
+            res.append({'data': {'id': row['source'], 'label': row['source']}, 'type': 'node', 'classes': node_class})    # Source vertex
             self.vertices.add(row['source'])
 
         # Target vertex
         if row['target'] not in self.vertices:
-            res.append({'data': {'id': row['target'], 'label': row['target']}, 'type': 'node', 'classes': 'unselected'})    # Target vertex
+            node_class = self.__get_node_class(node=row['target'], current=current, open=open, close=close)
+            res.append({'data': {'id': row['target'], 'label': row['target']}, 'type': 'node', 'classes': node_class})    # Target vertex
             self.vertices.add(row['target'])
 
         # Edge from Source to Target
@@ -120,6 +143,15 @@ class DashVisualizer(Visualizer):
         res.append({'data': {'source': row['source'], 'target': row['target'], 'weight': weight}, 'type': 'edge'})          # Edge
 
         return res
+
+    def __get_node_class(self, node, current, open, close):
+        if node == current:
+            return'current'
+        elif node in open:
+            return 'open'
+        elif node in close:
+            return'close'
+        return 'unselected'
 
     def __generate_dash_button(self):
         return [
@@ -130,45 +162,6 @@ class DashVisualizer(Visualizer):
 
     def __generate_dash_interval(self):
         return dcc.Interval(id='interval-component', interval=1000, n_intervals=0)
-
-    def __generate_dash_graph_step(self, graph, current, open=list(), close=list()):
-        """
-        Internal method that converts a pandas dataframe (representing a Graph) into a list that can be ingested by
-        Dash to create a visualization of the graph.
-
-        :param Graph graph: graph object to visualize.
-        :return:
-        """
-        self.vertices = set()
-        graph_elements = graph.data.apply(self.__create_graph_step, current=current, open=open, close=close, weight_cols=graph.weight_cols, axis=1)
-        graph_elements = [item for sublist in graph_elements for item in sublist]
-        return graph_elements
-
-    def __create_graph_step(self, row, current, open, close, weight_cols):
-        """
-        Internal method that transforms the data from a single row of the dataframe into a list containing: the source
-        vertex, the target vertex and the edge linking both vertices. Repeated vertices are not duplicated.
-
-        :param pd.Series row: pandas Series containing a row from the data DataFrame.
-        :return:
-        """#todo add something so that i can modify the colors later with css
-        res = list()
-
-        # Source vertex
-        if row['source'] not in self.vertices:
-            res.append({'data': {'id': row['source'], 'label': row['source']}, 'type': 'node', 'classes': 'unselected'})    # Source vertex
-            self.vertices.add(row['source'])
-
-        # Target vertex
-        if row['target'] not in self.vertices:
-            res.append({'data': {'id': row['target'], 'label': row['target']}, 'type': 'node', 'classes': 'unselected'})    # Target vertex
-            self.vertices.add(row['target'])
-
-        # Edge from Source to Target
-        weight = '(' + ','.join([str(row[weight]) for weight in weight_cols]) + ')'
-        res.append({'data': {'source': row['source'], 'target': row['target'], 'weight': weight}, 'type': 'edge'})          # Edge
-
-        return res
 
     def __update_dash(self, elements):
         """
@@ -190,7 +183,7 @@ class DashVisualizer(Visualizer):
     def wait(self, graph, current, open=list(), close=list()):
         DashVisualizer.dash_elements = list()
         DashVisualizer.dash_elements.extend(self.__generate_dash_button())
-        DashVisualizer.dash_elements.append(self.__generate_dash_graph(graph))
+        DashVisualizer.dash_elements.append(self.__generate_dash_graph(graph, current=current, open=open, close=close))
         self.__update_dash(DashVisualizer.dash_elements)
 
         event_lock.wait()
@@ -200,6 +193,7 @@ class DashVisualizer(Visualizer):
         This method updates the Dash dashboard to show the current state of the graph.
         :return:
         """
+
         if not (len(DashVisualizer.dash_elements) > 0 and isinstance(DashVisualizer.dash_elements[0], dcc.Interval)):
             DashVisualizer.dash_elements.append(self.__generate_dash_interval())
 
@@ -210,3 +204,5 @@ class DashVisualizer(Visualizer):
             DashVisualizer.dash_elements.append(self.__generate_dash_graph(elem))
 
         self.__update_dash(DashVisualizer.dash_elements)
+
+        DashVisualizer.dash_show_flag = True
