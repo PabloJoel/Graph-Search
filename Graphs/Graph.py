@@ -205,7 +205,8 @@ class Graph:
         :return:
         """
         copy = Graph(self.data.copy(deep=True), source_col=self.source_col, target_col=self.target_col, weight_cols=self.weight_cols,
-                     bidirectional=self.bidirectional)
+                     bidirectional=False)
+        copy.bidirectional = self.bidirectional
         return copy
 
     def show(self):
