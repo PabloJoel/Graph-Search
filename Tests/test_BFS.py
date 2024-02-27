@@ -154,3 +154,10 @@ def test_data_bidirectional_dash():
     graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
     bfs = BFS(graph, visualizer=DashVisualizer())
     bfs.run('Frankfurt', show_end=True)
+
+
+def test_data_dash_by_step():
+    data = pd.read_csv('bfs-data.csv')
+    graph = Graph(data, weight_cols=['weight_1'])
+    bfs = BFS(graph, visualizer=DashVisualizer())
+    bfs.run('Frankfurt', show_by_step=True, show_end=True)

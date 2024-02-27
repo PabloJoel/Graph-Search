@@ -54,11 +54,16 @@ class BFS(Algorithm):
         finished = False
         while len(queue) > 0 and not finished:
             node = queue.popleft()
+            successors = self.graph.get_successors(node)
+
+            if show_by_step:
+                self.visualizer.wait(graph=self.graph, current=node, open=successors, close=explored_vertices)
+
             if node == end_vertex:
                 finished = True
                 self.solution.add_solution(end_vertex, solution.get_path_uninformed(start_vertex, end_vertex))
             else:
-                for successor in self.graph.get_successors(node):
+                for successor in successors:
                     if successor not in explored_vertices:
                         explored_vertices.add(successor)
                         queue.append(successor)
