@@ -118,3 +118,45 @@ def test_data_bidirectional_finish_dash():
     graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
     dijkstra.run(start_vertex='a', end_vertex='c', show_end=True)
+
+
+def test_data_dash():
+    data = pd.read_csv('dijkstra-data.csv')
+    graph = Graph(data, weight_cols=['weight_1'])
+    dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
+    dijkstra.run(start_vertex='a', show_end=True)
+
+
+def test_data_finish_dash():
+    data = pd.read_csv('dijkstra-data.csv')
+    graph = Graph(data, weight_cols=['weight_1'])
+    dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
+    dijkstra.run(start_vertex='a', end_vertex='c', show_end=True)
+
+
+def test_data_dash_by_step():
+    data = pd.read_csv('dijkstra-data.csv')
+    graph = Graph(data, weight_cols=['weight_1'])
+    dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
+    dijkstra.run(start_vertex='a', show_by_step=True, show_end=True)
+
+
+def test_data_finish_dash_by_step():
+    data = pd.read_csv('dijkstra-data.csv')
+    graph = Graph(data, weight_cols=['weight_1'])
+    dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
+    dijkstra.run(start_vertex='a', end_vertex='c', show_by_step=True, show_end=True)
+
+
+def test_data_bidirectional_dash_by_step():
+    data = pd.read_csv('dijkstra-data.csv')
+    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
+    dijkstra.run(start_vertex='a', show_by_step=True, show_end=True)
+
+
+def test_data_bidirectional_finish_dash_by_step():
+    data = pd.read_csv('dijkstra-data.csv')
+    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
+    dijkstra.run(start_vertex='a', end_vertex='c', show_by_step=True, show_end=True)

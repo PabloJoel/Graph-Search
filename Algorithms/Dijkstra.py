@@ -57,6 +57,10 @@ class Dijkstra(Algorithm):
             current_vertex = start_vertex
 
             while len(unexplored_vertices) > 0:
+                successors = self.graph.get_successors(current_vertex)
+                if show_by_step:
+                    self.visualizer.wait(graph=self.graph, current=current_vertex, open=successors, close=explored_vertices)
+
                 explored_vertices.add(current_vertex)
                 unexplored_vertices.remove(current_vertex)
 
@@ -65,7 +69,7 @@ class Dijkstra(Algorithm):
                     finished = True
                     break
 
-                for successor in self.graph.get_successors(current_vertex):
+                for successor in successors:
                     if successor not in explored_vertices:
                         unexplored_vertices.add(successor)
 
