@@ -84,3 +84,10 @@ def test_data_dash():
     dfs = DFS(graph, visualizer=DashVisualizer())
     dfs.run(1,show_end=True)
 
+
+def test_data_dash_by_step():
+    data = pd.read_csv('dfs-data.csv')
+    graph = Graph(data)
+    dfs = DFS(graph, visualizer=DashVisualizer())
+    dfs.run(1, show_by_step=True, show_end=True)
+

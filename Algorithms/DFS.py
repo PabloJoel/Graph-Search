@@ -66,12 +66,16 @@ class DFS(Algorithm):
             self.visualizer.show(graph=self.solution.get_all_solutions())
 
     def __dfs_recursion(self, start_vertex, solution_template, end_vertex=None, show_by_step=False, show_end=False):
-        self.explored_vertices.add(start_vertex)
+        successors = self.graph.get_successors(start_vertex)
 
+        if show_by_step:
+            self.visualizer.wait(graph=self.graph, current=start_vertex, open=successors, close=self.explored_vertices)
+
+        self.explored_vertices.add(start_vertex)
         if start_vertex == end_vertex:
             return True
 
-        for successor in self.graph.get_successors(start_vertex):
+        for successor in successors:
             if successor not in self.explored_vertices:
                 weight = self.graph.get_weight(start_vertex, successor)
                 solution_template.add_edge(start_vertex, successor, weight)
