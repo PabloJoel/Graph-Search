@@ -62,7 +62,7 @@ class PULSE(Algorithm):
 
         if start_vertex in all_vertices and end_vertex in all_vertices and start_vertex != end_vertex:
             self._initialization(end_vertex)
-            self._pulse(start_vertex, 0, 0, tuple())
+            self._pulse(start_vertex, 0, 0, tuple(), show_by_step)
             for path in self.check_solutions.keys():
                 solution_path = solution_template.copy()
                 self._backtrack_sol(path, solution_path)
@@ -104,7 +104,7 @@ class PULSE(Algorithm):
         T = self.inverse_c_sol.get_solution(self.start_vertex)[0].get_path_cost(start=self.end_vertex, end=self.start_vertex)[1]
         self.nadir_point = (C,T)
 
-    def _pulse(self, current_vertex, cumulative_c, cumulative_t, current_path):
+    def _pulse(self, current_vertex, cumulative_c, cumulative_t, current_path, show_by_step):
         if current_vertex == self.end_vertex:
             self._pulse_end(current_vertex, cumulative_c, cumulative_t, current_path)
         else:
@@ -112,13 +112,19 @@ class PULSE(Algorithm):
                 if not self._checkNadirPoint(current_vertex, cumulative_c, cumulative_t):
                     if not self._checkEfficientSet(current_vertex, cumulative_c, cumulative_t):
                         if not self._checkLabels(current_vertex, cumulative_c, cumulative_t):
+
+                            successors = self.graph.get_successors(current_vertex)
+                            if show_by_step:
+                                self.visualizer.wait(graph=self.graph, current=current_vertex, open=successors,
+                                                     close=self.labels.keys())
+
                             self._store(current_vertex, cumulative_c, cumulative_t)
                             new_path = list(current_path)
                             new_path.append(current_vertex)
                             new_path = tuple(new_path)
-                            for successor in self.graph.get_successors(current_vertex):
+                            for successor in successors:
                                 successor_cost_c, successor_cost_t = self.graph.get_weight(current_vertex, successor)
-                                self._pulse(successor, cumulative_c+successor_cost_c, cumulative_t+successor_cost_t, new_path)
+                                self._pulse(successor, cumulative_c+successor_cost_c, cumulative_t+successor_cost_t, new_path, show_by_step)
 
     def _pulse_end(self, current_vertex, cumulative_c, cumulative_t, current_path):
         if not self._checkEfficientSet(current_vertex, cumulative_c, cumulative_t):
