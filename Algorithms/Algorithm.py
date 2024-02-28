@@ -30,17 +30,9 @@ class Algorithm:
             solution.show()
 
     @abstractmethod
-    def step(self):
-        """
-        Run a single step of the algorithm.
-        :return:
-        """
-        pass
-
-    @abstractmethod
     def run(self):
         """
-        Run the whole algorithm, from start to end.
+        Run the algorithm, from start to end.
         :return:
         """
         pass
