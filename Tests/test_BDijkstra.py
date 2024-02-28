@@ -181,3 +181,10 @@ def test_pulse_dash():
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     bdijkstra = BDijkstra(graph, visualizer=DashVisualizer())
     bdijkstra.run(start_vertex='s', end_vertex='y', show_end=True)
+
+
+def test_pulse_dash_by_step():
+    data = pd.read_csv('namoa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    bdijkstra = BDijkstra(graph, visualizer=DashVisualizer())
+    bdijkstra.run(start_vertex='s', end_vertex='y', show_by_step=True, show_end=True)

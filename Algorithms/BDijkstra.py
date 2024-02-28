@@ -177,6 +177,10 @@ class BDijkstra(Algorithm):
                 self.L[i].append(l_star)
                 self.L[i] = self._get_nd_subset(self.L[i])
 
+                if show_by_step:
+                    self.visualizer.wait(graph=self.graph, current=i, open=self.heap.vertex_label.keys(),
+                                         close=[vertex for vertex, content in self.L.items() if len(content)>0])
+
                 lnew = self.new_candidate_label(i, l_star)
                 if lnew is not None:
                     self.heap.push(lnew)
