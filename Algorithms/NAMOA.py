@@ -97,6 +97,11 @@ class NAMOA(Algorithm):
 
                         break
 
+                if show_by_step:
+                    self.visualizer.wait(graph=self.graph, current=chosen_vertex,
+                                         open=[vertex for vertex, content in gopen.items() if float("inf") not in content],
+                                         close=gclose.keys())
+
                 if chosen_vertex in end_vertices:  # Step 4: Solution Recording
                     for elem in chosen_gvertex:
                         if not self.is_dominated(elem, costs):

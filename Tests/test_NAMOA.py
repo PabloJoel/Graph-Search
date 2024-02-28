@@ -107,3 +107,9 @@ def test_namoa_dash():
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA, visualizer=DashVisualizer())
     namoa.run(start_vertex='s', end_vertices='y', show_end=True)
 
+
+def test_namoa_dash_by_step():
+    data = pd.read_csv('namoa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA, visualizer=DashVisualizer())
+    namoa.run(start_vertex='s', end_vertices='y', show_by_step=True, show_end=True)
