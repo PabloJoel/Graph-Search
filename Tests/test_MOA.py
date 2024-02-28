@@ -107,6 +107,13 @@ def test_moa_dash():
     moa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_end=True)
 
 
+def test_moa_dash_by_step():
+    data = pd.read_csv('moa-data.csv')
+    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    moa = MOA(graph, heuristic=MockedHeuristicMOA, visualizer=DashVisualizer())
+    moa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_by_step=True, show_end=True)
+
+
 def test_dominated_empty1():
     data = pd.DataFrame()
     graph = Graph(data, bidirectional=False)

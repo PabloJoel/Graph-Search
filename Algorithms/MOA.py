@@ -109,6 +109,9 @@ class MOA(Algorithm):
                     open.remove(n)
                     closed.append(n)
 
+                if show_by_step:
+                    self.visualizer.wait(graph=self.graph, current=n, open=open, close=closed)
+
                 if n in end_vertices:
                     # Step 4: Identify solution
                     values = list(solution_costs.values())
