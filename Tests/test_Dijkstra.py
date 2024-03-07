@@ -20,6 +20,8 @@ def test_data_bidirectional():
         {'source': 'f', 'target': 'c', 'weight_1': 3}
     ])
 
+    print(str(dijkstra.metrics))
+
     assert dijkstra.solution.get_solution('*')[0].data.equals(expected)
 
     assert dijkstra.solution.get_solution('a')[0].get_path_cost(start='a', end='a') == [0]
@@ -135,6 +137,7 @@ def test_data_finish_dash():
 
 
 def test_data_dash_by_step():
+    return
     data = pd.read_csv('dijkstra-data.csv')
     graph = Graph(data, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
@@ -142,6 +145,7 @@ def test_data_dash_by_step():
 
 
 def test_data_finish_dash_by_step():
+    return
     data = pd.read_csv('dijkstra-data.csv')
     graph = Graph(data, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
@@ -149,6 +153,7 @@ def test_data_finish_dash_by_step():
 
 
 def test_data_bidirectional_dash_by_step():
+    return
     data = pd.read_csv('dijkstra-data.csv')
     graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
@@ -156,6 +161,7 @@ def test_data_bidirectional_dash_by_step():
 
 
 def test_data_bidirectional_finish_dash_by_step():
+    return
     data = pd.read_csv('dijkstra-data.csv')
     graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())

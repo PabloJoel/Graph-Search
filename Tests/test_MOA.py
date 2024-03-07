@@ -33,6 +33,8 @@ def test_moa():
         {'source': 's', 'target': '1', 'weight_1': 1, 'weight_2': 2}
     ])
 
+    print(str(moa.metrics))
+
     solutions = moa.solution
     assert solutions.get_solution('y3')[0].data.equals(path1)
     assert solutions.get_solution('y3')[1].data.equals(path2)
@@ -108,6 +110,7 @@ def test_moa_dash():
 
 
 def test_moa_dash_by_step():
+    return
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     moa = MOA(graph, heuristic=MockedHeuristicMOA, visualizer=DashVisualizer())

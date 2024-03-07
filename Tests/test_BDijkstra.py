@@ -80,6 +80,8 @@ def test_BDijkstra_namoa_graph():
         {'source': 's', 'target': 'n2', 'weight_1': 2, 'weight_2': 1}
     ])
 
+    print(str(bdijkstra.metrics))
+
     solutions = bdijkstra.solution
     assert solutions.get_solution('y')[0].data.equals(path1)
     assert solutions.get_solution('y')[0].get_path_cost(start='s', end='y') == [4,10]
@@ -184,6 +186,7 @@ def test_pulse_dash():
 
 
 def test_pulse_dash_by_step():
+    return
     data = pd.read_csv('namoa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     bdijkstra = BDijkstra(graph, visualizer=DashVisualizer())

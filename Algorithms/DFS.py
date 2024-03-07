@@ -45,6 +45,7 @@ class DFS(Algorithm):
 
         found = self.__dfs_recursion(start_vertex, solution_template, end_vertex, show_by_step, show_end)
 
+        self.metrics.end_execution()
         if found and end_vertex is not None and not solution_template.data.empty:
             self.solution.add_solution(end_vertex, solution_template)
 
@@ -59,6 +60,7 @@ class DFS(Algorithm):
             self.visualizer.show(graph=self.solution.get_all_solutions())
 
     def __dfs_recursion(self, start_vertex, solution_template, end_vertex=None, show_by_step=False, show_end=False):
+        self.metrics.add_explored_node()
         successors = self.graph.get_successors(start_vertex)
 
         if show_by_step:

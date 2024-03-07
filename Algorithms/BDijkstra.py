@@ -172,6 +172,7 @@ class BDijkstra(Algorithm):
             self.heap.push(ls)
 
             while self.heap.size() > 0:
+                self.metrics.add_explored_node()
                 l_star = self.heap.pop()
                 i = l_star[0]
                 self.L[i].append(l_star)
@@ -193,6 +194,7 @@ class BDijkstra(Algorithm):
                 self._backtrack_sol(sol, solution_path)
                 self.solution.add_solution(end_vertex, solution_path)
 
+        self.metrics.end_execution()
         if self.solution.is_empty():
             print(f'Warning, could not find a path from {start_vertex} to {end_vertex}')
 

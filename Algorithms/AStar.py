@@ -43,6 +43,7 @@ class AStar(Algorithm):
             f = {vertex: float("inf") if vertex != start_vertex else h[start_vertex] for vertex in all_vertices}
 
             while len(open) > 0:
+                self.metrics.add_explored_node()
                 open_f = {node:value for node,value in f.items() if node in open}
                 current = min(open_f, key=open_f.get)
 
@@ -68,6 +69,7 @@ class AStar(Algorithm):
                         if successor not in open:
                             open.add(successor)
 
+        self.metrics.end_execution()
         if not finished and end_vertex is not None:
             print(f'Warning, could not find a path from {start_vertex} to {end_vertex}')
 

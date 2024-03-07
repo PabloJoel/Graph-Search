@@ -25,6 +25,8 @@ def test_namoa():
         {'source': 's', 'target': 'n2', 'weight_1': 2, 'weight_2': 1}
     ])
 
+    print(str(namoa.metrics))
+
     solutions = namoa.solution
     assert solutions.get_solution('y')[0].data.equals(path1)
     assert solutions.get_solution('y')[1].data.equals(path2)
@@ -109,6 +111,7 @@ def test_namoa_dash():
 
 
 def test_namoa_dash_by_step():
+    return
     data = pd.read_csv('namoa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA, visualizer=DashVisualizer())

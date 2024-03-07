@@ -1,13 +1,15 @@
 # Graph-Search
 
 # TO-DO
-- If the **show** method shows the data parameter it's never going to be updated. Some more thinking is needed. Think about how the solution is going to be displayed and how the process is going to be displayed.
 - Work a little bit more on the Dash visualization to make it look better:
   - Increase arrow size
   - Increase weight size
   - Increase node size
   - Store nodes position when moved to avoid refreshing the Graph
-- Should the show function in Graph return something instead of doing something?
--DashGraph
+- DashGraph
   - Show both data and solution
   - Empty weights
+- Paquete de Visualizacion(en tiempo pseudo-real):
+  - Un boton para continuar la ejecucion (actualizo la visualizacion del grafo y espero hasta que se pulse el boton)
+  - Dar colores y cambiar el texto del botom
+  - Mejorar la presentacion del boton y el texto

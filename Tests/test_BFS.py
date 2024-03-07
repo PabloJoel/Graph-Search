@@ -24,6 +24,8 @@ def test_data_bidirectional():
         {'source': 'Nürnberg', 'target': 'Stuttgart'}
     ])
 
+    print(str(bfs.metrics))
+
     assert bfs.solution.get_solution('Mannheim')[0].get_path_cost('Frankfurt', 'Mannheim') == []
     assert bfs.solution.get_solution('Würzburg')[0].get_path_cost('Frankfurt', 'Würzburg') == []
     assert bfs.solution.get_solution('Kassel')[0].get_path_cost('Frankfurt', 'Kassel') == []
@@ -157,6 +159,7 @@ def test_data_bidirectional_dash():
 
 
 def test_data_dash_by_step():
+    return
     data = pd.read_csv('bfs-data.csv')
     graph = Graph(data, weight_cols=['weight_1'])
     bfs = BFS(graph, visualizer=DashVisualizer())

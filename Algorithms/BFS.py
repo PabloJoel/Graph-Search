@@ -46,6 +46,7 @@ class BFS(Algorithm):
 
         finished = False
         while len(queue) > 0 and not finished:
+            self.metrics.add_explored_node()
             node = queue.popleft()
             successors = self.graph.get_successors(node)
 
@@ -63,6 +64,7 @@ class BFS(Algorithm):
                         weight = self.graph.get_weight(node, successor)
                         solution.add_edge(node, successor, weights=weight)
 
+        self.metrics.end_execution()
         if len(self.solution.get_all_solutions()) == 0 and len(solution.data) > 0 and end_vertex is None:
             self.solution.add_solution('*', solution)
 

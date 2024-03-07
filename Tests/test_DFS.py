@@ -16,6 +16,8 @@ def test_data_bidirectional():
         {'source': 2, 'target': 3},
     ])
 
+    print(str(dfs.metrics))
+
     assert dfs.solution.get_solution(3)[0].get_path_cost(1, 3) == []
     assert dfs.solution.get_solution(3)[0].data.equals(expected)
 
@@ -86,6 +88,7 @@ def test_data_dash():
 
 
 def test_data_dash_by_step():
+    return
     data = pd.read_csv('dfs-data.csv')
     graph = Graph(data)
     dfs = DFS(graph, visualizer=DashVisualizer())

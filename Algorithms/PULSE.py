@@ -68,6 +68,7 @@ class PULSE(Algorithm):
                 self._backtrack_sol(path, solution_path)
                 self.solution.add_solution(end_vertex, solution_path)
 
+        self.metrics.end_execution()
         if self.solution.is_empty():
             print(f'Warning, could not find a path from {start_vertex} to {end_vertex}')
 
@@ -105,6 +106,7 @@ class PULSE(Algorithm):
         self.nadir_point = (C,T)
 
     def _pulse(self, current_vertex, cumulative_c, cumulative_t, current_path, show_by_step):
+        self.metrics.add_explored_node()
         if current_vertex == self.end_vertex:
             self._pulse_end(current_vertex, cumulative_c, cumulative_t, current_path)
         else:

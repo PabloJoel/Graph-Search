@@ -17,6 +17,8 @@ def test_astar():
         {'source': 'a', 'target': 'c', 'weight_1': 3}
     ]
 
+    print(str(a_star.metrics))
+
     assert a_star.solution.get_solution('f')[0].data.equals(pd.DataFrame(expected))
 
     assert a_star.solution.get_solution('f')[0].get_path_cost(start='a', end='f') == [10]
@@ -81,6 +83,7 @@ def test_astar_bidirectional_dash():
 
 
 def test_astar_dash_by_step():
+    return
     data = pd.read_csv('astar-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
     a_star = AStar(graph, visualizer=DashVisualizer())

@@ -50,6 +50,7 @@ class Dijkstra(Algorithm):
             current_vertex = start_vertex
 
             while len(unexplored_vertices) > 0:
+                self.metrics.add_explored_node()
                 successors = self.graph.get_successors(current_vertex)
                 if show_by_step:
                     self.visualizer.wait(graph=self.graph, current=current_vertex, open=successors, close=explored_vertices)
@@ -90,6 +91,7 @@ class Dijkstra(Algorithm):
                         min_vertex = unexplored_vertex
                 current_vertex = min_vertex
 
+        self.metrics.end_execution()
         if len(self.solution.get_all_solutions()) == 0 and len(solution.data) > 0 and end_vertex is None:
             self.solution.add_solution('*', solution)
 

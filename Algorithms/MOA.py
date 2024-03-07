@@ -64,6 +64,7 @@ class MOA(Algorithm):
             f = {vertex: [float("inf")] if vertex != start_vertex else h[start_vertex] for vertex in all_vertices}
 
             while not finished:
+                self.metrics.add_explored_node()
                 # Step 1: Create ND (nodes from OPEN that are not dominated by SOLUTIONS or OPEN)
                 nd = copy.deepcopy(open)
                 for vertex in open:
@@ -196,6 +197,7 @@ class MOA(Algorithm):
 
                                     f[successor] = self._get_non_dm_subset(self._add_costs(g[successor], h[successor]))
 
+        self.metrics.end_execution()
         if not finished and end_vertices is not None:
             print(f'Warning, could not find a path from {start_vertex} to {end_vertices}')
 

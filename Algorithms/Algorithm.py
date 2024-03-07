@@ -3,6 +3,7 @@ from abc import abstractmethod
 from Graphs.Graph import Graph
 from Visualizers.Visualizer import Visualizer
 from Solution.Solution import Solution
+from Metrics.Metrics import Metrics
 
 
 class Algorithm:
@@ -19,6 +20,7 @@ class Algorithm:
         self.graph = graph.copy()
         self.solution = Solution()
         self.visualizer = visualizer
+        self.metrics = Metrics()
 
     def show(self):
         """

@@ -65,6 +65,7 @@ class NAMOA(Algorithm):
             label = dict()
 
             while not finished:
+                self.metrics.add_explored_node()
                 # Step 2: Check Termination
                 if len(open) == 0:
                     for vertex, costs in costs_vertex.items():
@@ -180,6 +181,8 @@ class NAMOA(Algorithm):
                                 else:
                                     label[(chosen_vertex, successor)].extend(gsucc)
                                     label[(chosen_vertex, successor)] = self._get_non_dm_subset(label[(chosen_vertex, successor)])
+
+        self.metrics.end_execution()
         if not finished and end_vertices is not None:
             print(f'Warning, could not find a path from {start_vertex} to {end_vertices}')
 
