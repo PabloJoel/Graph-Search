@@ -31,8 +31,8 @@ def test_namoa():
     assert solutions.get_solution('y')[0].data.equals(path1)
     assert solutions.get_solution('y')[1].data.equals(path2)
 
-    assert solutions.get_solution('y')[0].get_path_cost(start='s', end='y') == [4,10]
-    assert solutions.get_solution('y')[1].get_path_cost(start='s', end='y') == [9,3]
+    assert solutions.get_solution_cost('s', 'y') == [[4,10], [9,3]]
+    assert solutions.get_min_solution_cost('s') == [4,10]
 
 
 def test_namoa2():
@@ -74,6 +74,10 @@ def test_namoa2():
     assert solutions.get_solution('y3')[0].get_path_cost(start='s', end='y3') == [6,7]
     assert solutions.get_solution('y3')[1].get_path_cost(start='s', end='y3') == [9,5]
     assert solutions.get_solution('y1')[0].get_path_cost(start='s', end='y1') == [4,11]
+
+    assert solutions.get_solution_cost('s', 'y3') == [[6,7], [9,5]]
+    assert solutions.get_solution_cost('s', 'y1') == [[4,11]]
+    assert solutions.get_min_solution_cost('s') == [4, 11]
 
 
 def test_namoa_missing_source():

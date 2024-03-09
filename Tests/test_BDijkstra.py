@@ -86,8 +86,8 @@ def test_BDijkstra_namoa_graph():
     assert solutions.get_solution('y')[0].data.equals(path1)
     assert solutions.get_solution('y')[0].get_path_cost(start='s', end='y') == [4,10]
 
-    assert solutions.get_solution('y')[1].data.equals(path2)
-    assert solutions.get_solution('y')[1].get_path_cost(start='s', end='y') == [9,3]
+    assert solutions.get_solution_cost('s', 'y') == [[4, 10], [9, 3]]
+    assert solutions.get_min_solution_cost('s') == [4, 10]
 
 
 def test_BDijkstra_moa_graph_y3():
@@ -126,9 +126,8 @@ def test_BDijkstra_moa_graph_y3():
     assert solutions.get_solution('y3')[1].data.equals(path2)
     assert solutions.get_solution('y3')[2].data.equals(path3)
 
-    assert solutions.get_solution('y3')[0].get_path_cost(start='s', end='y3') == [5,11]
-    assert solutions.get_solution('y3')[1].get_path_cost(start='s', end='y3') == [6,7]
-    assert solutions.get_solution('y3')[2].get_path_cost(start='s', end='y3') == [9,5]
+    assert solutions.get_solution_cost('s', 'y3') == [[5, 11],[6, 7],[9, 5]]
+    assert solutions.get_min_solution_cost('s') == [5, 11]
 
 
 def test_BDijkstra_moa_graph_y1():
@@ -148,7 +147,8 @@ def test_BDijkstra_moa_graph_y1():
 
     solutions = bdijkstra.solution
     assert solutions.get_solution('y1')[0].data.equals(path1)
-    assert solutions.get_solution('y1')[0].get_path_cost(start='s', end='y1') == [4,11]
+    assert solutions.get_solution_cost('s', 'y1') == [[4, 11], [7, 9]]
+    assert solutions.get_min_solution_cost('s') == [4, 11]
 
 
 def test_namoa_missing_source():
