@@ -9,7 +9,7 @@ from Tests.heuristics import MockedHeuristicMOA, MockedHeuristicNAMOA
 def test_moa():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristicMOA)
+    moa = MOA(graph, heuristic=MockedHeuristicMOA(graph))
     moa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_end=True)
 
     path1 = pd.DataFrame(data=[
@@ -49,7 +49,7 @@ def test_moa2():
     # using the NAMOA graph
     data = pd.read_csv('namoa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristicNAMOA)
+    moa = MOA(graph, heuristic=MockedHeuristicNAMOA(graph))
     moa.run(start_vertex='s', end_vertices=['y'], show_end=True)
 
     path1 = pd.DataFrame(data=[
@@ -75,7 +75,7 @@ def test_moa2():
 def test_moa_missing_source():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristicMOA)
+    moa = MOA(graph, heuristic=MockedHeuristicMOA(graph))
     moa.run(start_vertex='df', end_vertices=['y1','y2','y3'], show_end=True)
 
     assert moa.solution.get_solution('y1') is None
@@ -86,7 +86,7 @@ def test_moa_missing_source():
 def test_moa_missing_target():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristicMOA)
+    moa = MOA(graph, heuristic=MockedHeuristicMOA(graph))
     moa.run(start_vertex='s', end_vertices=['x','y'], show_end=True)
 
     assert moa.solution.get_solution('x') is None
@@ -96,7 +96,7 @@ def test_moa_missing_target():
 def test_moa_missing_equal():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristicMOA)
+    moa = MOA(graph, heuristic=MockedHeuristicMOA(graph))
     moa.run(start_vertex='s', end_vertices=['s'], show_end=True)
 
     assert moa.solution.get_solution('s') is None
@@ -105,7 +105,7 @@ def test_moa_missing_equal():
 def test_moa_dash():
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristicMOA, visualizer=DashVisualizer())
+    moa = MOA(graph, heuristic=MockedHeuristicMOA(graph), visualizer=DashVisualizer())
     moa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_end=True)
 
 
@@ -113,7 +113,7 @@ def test_moa_dash_by_step():
     return
     data = pd.read_csv('moa-data.csv')
     graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph, heuristic=MockedHeuristicMOA, visualizer=DashVisualizer())
+    moa = MOA(graph, heuristic=MockedHeuristicMOA(graph), visualizer=DashVisualizer())
     moa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_by_step=True, show_end=True)
 
 

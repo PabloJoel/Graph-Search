@@ -32,7 +32,11 @@ class Solution:
 
     def get_min_solution_cost(self, vertex_start):
         compressed_list = [self.get_solution_cost(vertex_start, objective) for objective in self._solutions.keys()]
-        return min([subelem for elem in compressed_list for subelem in elem])
+        res = [subelem for elem in compressed_list for subelem in elem]
+        if len(res) > 0:
+            return min(res)
+        else:
+            return list()
 
     def get_all_solutions(self):
         return [subelem for elem in list(self._solutions.values()) for subelem in elem]

@@ -13,7 +13,7 @@ class NAMOA(Algorithm):
     NAMOA* algorithm
     """
 
-    def __init__(self, graph: Graph, visualizer=ConsoleVisualizer(), heuristic=Random):
+    def __init__(self, graph: Graph, visualizer=ConsoleVisualizer(), heuristic=None):
         """
         Creates the algorithm by using the input graph that contains the data, and by creating an empty Graph where the
         solution is going to be added later.
@@ -24,7 +24,10 @@ class NAMOA(Algorithm):
         """
 
         super().__init__(graph, visualizer)
-        self.heuristic = heuristic(graph)
+        if heuristic is None:
+            self.heuristic = Random(graph)
+        else:
+            self.heuristic = heuristic
 
     def step(self):
         """

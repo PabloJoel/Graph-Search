@@ -15,7 +15,7 @@ class PULSE(Algorithm):
     (conflicting) objective functions.
     """
 
-    def __init__(self, graph: Graph, visualizer=ConsoleVisualizer(), heuristic=Random):
+    def __init__(self, graph: Graph, visualizer=ConsoleVisualizer(), heuristic=None):
         """
         Creates the algorithm by using the input graph that contains the data, and by creating an empty Graph where the
         solution is going to be added later.
@@ -26,7 +26,10 @@ class PULSE(Algorithm):
         """
 
         super().__init__(graph, visualizer)
-        self.heuristic = heuristic(graph)
+        if heuristic is None:
+            self.heuristic = Random(graph)
+        else:
+            self.heuristic = heuristic
 
         # Algorithm Parameters
         self.check_solutions, self.labels, self.min_c_cost, self.min_t_cost = dict(), dict(), dict(), dict()
