@@ -39,7 +39,8 @@ class MockedHeuristicAutomatic(Heuristic):
         bfs_heur = BFS(graph)
         self.heurs = dict()
         for vertex in graph.get_all_vertices():
-            self.heurs.update({vertex: bfs_heur.calculate(vertex, end_vertex)})
+            distance = bfs_heur.calculate(vertex, end_vertex)
+            self.heurs.update({vertex: [distance, distance]})
         super().__init__(graph)
 
     def calculate(self, vertex):
