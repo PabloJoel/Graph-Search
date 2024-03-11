@@ -66,7 +66,7 @@ class DashVisualizer(Visualizer):
         self.thread = threading.Thread(target=self.__run_dash)
         self.thread.start()  # Run the Dash server on the background
 
-    def __generate_dash_graph(self, graph, current=None, open=list(), close=list()):
+    def __generate_dash_graph(self, graph, current=None, open=list(), close=list(), show_all=False):
         """
         Internal method that converts a pandas dataframe (representing a Graph) into a list that can be ingested by
         Dash to create a visualization of the graph.
@@ -74,9 +74,8 @@ class DashVisualizer(Visualizer):
         :param Graph graph: graph object to visualize.
         :return:
         """
-        self.vertices = set()
         graph_elements = graph.data.apply(self.__create_graph, weight_cols=graph.weight_cols, current=current,
-                                          open=open, close=close, axis=1)
+                                          open=open, close=close, show_all=show_all, axis=1)
         graph_elements = [item for sublist in graph_elements for item in sublist]
 
         return cyto.Cytoscape(
@@ -116,7 +115,7 @@ class DashVisualizer(Visualizer):
             style={'width': '1400px', 'height': '1500px'}
         )
 
-    def __create_graph(self, row, weight_cols, current=None, open=list(), close=list()):
+    def __create_graph(self, row, weight_cols, current=None, open=list(), close=list(), show_all=False):
         """
         Internal method that transforms the data from a single row of the dataframe into a list containing: the source
         vertex, the target vertex and the edge linking both vertices. Repeated vertices are not duplicated.
@@ -125,22 +124,20 @@ class DashVisualizer(Visualizer):
         :return:
         """
         res = list()
-
         # Source vertex
-        if row['source'] not in self.vertices:
-            node_class = self.__get_node_class(node=row['source'], current=current, open=open, close=close)
+        node_class = self.__get_node_class(node=row['source'], current=current, open=open, close=close)
+        if node_class != 'unselected' or show_all:
             res.append({'data': {'id': row['source'], 'label': row['source']}, 'type': 'node', 'classes': node_class})    # Source vertex
-            self.vertices.add(row['source'])
 
         # Target vertex
-        if row['target'] not in self.vertices:
-            node_class = self.__get_node_class(node=row['target'], current=current, open=open, close=close)
+        node_class = self.__get_node_class(node=row['target'], current=current, open=open, close=close)
+        if node_class != 'unselected' or show_all:
             res.append({'data': {'id': row['target'], 'label': row['target']}, 'type': 'node', 'classes': node_class})    # Target vertex
-            self.vertices.add(row['target'])
 
         # Edge from Source to Target
-        weight = '(' + ','.join([str(row[weight]) for weight in weight_cols]) + ')'
-        res.append({'data': {'source': row['source'], 'target': row['target'], 'weight': weight}, 'type': 'edge'})          # Edge
+        if len(res) == 2:
+            weight = '(' + ','.join([str(row[weight]) for weight in weight_cols]) + ')'
+            res.append({'data': {'source': row['source'], 'target': row['target'], 'weight': weight}, 'type': 'edge'})          # Edge
 
         return res
 
@@ -201,7 +198,7 @@ class DashVisualizer(Visualizer):
             graph = [graph]
 
         for elem in graph:
-            DashVisualizer.dash_elements.append(self.__generate_dash_graph(elem))
+            DashVisualizer.dash_elements.append(self.__generate_dash_graph(elem, show_all=True))
 
         self.__update_dash(DashVisualizer.dash_elements)
 
