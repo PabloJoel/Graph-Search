@@ -15,21 +15,16 @@ class PULSE(Algorithm):
     (conflicting) objective functions.
     """
 
-    def __init__(self, graph: Graph, visualizer=ConsoleVisualizer(), heuristic=None):
+    def __init__(self, graph: Graph, visualizer=ConsoleVisualizer()):
         """
         Creates the algorithm by using the input graph that contains the data, and by creating an empty Graph where the
         solution is going to be added later.
         The solution graph is created using the same parameters as the input graph, but empty.
         :param Graph graph: input graph containing the data.
         :param Visualizer visualizer: visualizer implementation to visualize the graphs. By default: ConsoleVisualizer.
-        :param heuristic: heuristic function to be used. By default: BFS Heuristic.
         """
 
         super().__init__(graph, visualizer)
-        if heuristic is None:
-            self.heuristic = Random(graph)
-        else:
-            self.heuristic = heuristic
 
         # Algorithm Parameters
         self.check_solutions, self.labels, self.min_c_cost, self.min_t_cost = dict(), dict(), dict(), dict()
