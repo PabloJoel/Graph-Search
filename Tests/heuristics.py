@@ -36,11 +36,10 @@ class MockedHeuristicNAMOA(Heuristic):
 class MockedHeuristicAutomatic(Heuristic):
 
     def __init__(self, graph: Graph, end_vertex):
-        bfs_heur = BFS(graph)
+        self.bfs_heur = BFS(graph)
+        self.end_vertex = end_vertex
         self.heurs = dict()
-        for vertex in graph.get_all_vertices():
-            distance = bfs_heur.calculate(vertex, end_vertex)
-            self.heurs.update({vertex: [distance, distance]})
+
         super().__init__(graph)
 
     def calculate(self, vertex):
@@ -49,4 +48,9 @@ class MockedHeuristicAutomatic(Heuristic):
         :param start:
         :return:
         """
-        return self.heurs[vertex]
+        if vertex in self.heurs:
+            return self.heurs[vertex]
+        else:
+            distance = self.bfs_heur.calculate(vertex, self.end_vertex)
+            self.heurs.update({vertex: [distance, distance]})
+            return self.heurs[vertex]
