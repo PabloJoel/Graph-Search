@@ -144,7 +144,7 @@ class BDijkstra(Algorithm):
         """
         pass
 
-    def run(self, start_vertex, end_vertex, show_by_step=False, show_end=False):
+    def run(self, start_vertex, end_vertex=None, show_by_step=False, show_end=False):
         """
         Runs the algorithm from start_vertex until there are no more vertices to explore or end_vertex has been explored.
         :param str start_vertex:
@@ -161,7 +161,7 @@ class BDijkstra(Algorithm):
 
         all_vertices = self.graph.get_all_vertices()
 
-        if start_vertex in all_vertices and end_vertex in all_vertices and start_vertex != end_vertex:
+        if start_vertex in all_vertices and ((end_vertex in all_vertices and start_vertex != end_vertex) or (end_vertex is None)):
             self.start_vertex = start_vertex
             self.heap = Heap()
             self.L = {vertex: list() for vertex in all_vertices}
@@ -189,6 +189,7 @@ class BDijkstra(Algorithm):
                     self.d2[i] = lnew[2]
                 self.relaxation_process(i, l_star)
 
+            end_vertex = all_vertices if end_vertex is None else end_vertex
             for sol in self.L[end_vertex]:
                 solution_path = solution_template.copy()
                 self._backtrack_sol(sol, solution_path)

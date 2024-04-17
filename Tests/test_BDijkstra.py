@@ -145,8 +145,20 @@ def test_BDijkstra_moa_graph_y1():
         {'source': 's', 'target': '1', 'weight_1': 1, 'weight_2': 2}
     ])
 
+    # cost: 7, 9
+    path2 = pd.DataFrame(data=[
+        {'source': '7', 'target': 'y1', 'weight_1': 1, 'weight_2': 4},
+        {'source': '5', 'target': '7', 'weight_1': 1, 'weight_2': 3},
+        {'source': '2', 'target': '5', 'weight_1': 2, 'weight_2': 1},
+        {'source': 's', 'target': '2', 'weight_1': 3, 'weight_2': 1}
+    ])
+
     solutions = bdijkstra.solution
     assert solutions.get_solution('y1')[0].data.equals(path1)
+    assert solutions.get_solution_cost('s', 'y1') == [[4, 11], [7, 9]]
+    assert solutions.get_min_solution_cost('s') == [4, 11]
+
+    assert solutions.get_solution('y1')[1].data.equals(path2)
     assert solutions.get_solution_cost('s', 'y1') == [[4, 11], [7, 9]]
     assert solutions.get_min_solution_cost('s') == [4, 11]
 
