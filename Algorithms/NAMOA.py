@@ -29,13 +29,6 @@ class NAMOA(Algorithm):
         else:
             self.heuristic = heuristic
 
-    def step(self):
-        """
-        Run one step of the algorithm.
-        :return:
-        """
-        pass
-
     def run(self, start_vertex, end_vertices=None, show_by_step=False, show_end=False):
         """
         Runs the algorithm from start_vertex until there are no more vertices to explore or end_vertex has been explored.

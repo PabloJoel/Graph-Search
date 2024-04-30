@@ -137,13 +137,6 @@ class BDijkstra(Algorithm):
         # Specific Algorithm Parameters
         self.heap, self.d1, self.d2, self.L, self.start_vertex = None, None, None, None, None
 
-    def step(self):
-        """
-        Run one step of the algorithm.
-        :return:
-        """
-        pass
-
     def run(self, start_vertex, end_vertex=None, show_by_step=False, show_end=False):
         """
         Runs the algorithm from start_vertex until there are no more vertices to explore or end_vertex has been explored.

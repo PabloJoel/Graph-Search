@@ -30,13 +30,6 @@ class PULSE(Algorithm):
         self.check_solutions, self.labels, self.min_c_cost, self.min_t_cost = dict(), dict(), dict(), dict()
         self.start_vertex, self.end_vertex, self.nadir_point = None, None, None
 
-    def step(self):
-        """
-        Run one step of the algorithm.
-        :return:
-        """
-        pass
-
     def run(self, start_vertex, end_vertex=None, show_by_step=False, show_end=False):
         """
         Runs the algorithm from start_vertex until there are no more vertices to explore or end_vertex has been explored.
