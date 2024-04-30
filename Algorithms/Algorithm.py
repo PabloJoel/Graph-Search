@@ -22,15 +22,6 @@ class Algorithm:
         self.visualizer = visualizer
         self.metrics = Metrics()
 
-    def show(self):
-        """
-        Show the current state of the data graph and solution graph.
-        :return:
-        """
-        self.graph.show()
-        for solution in self.solution.get_all_solutions():
-            solution.show()
-
     @abstractmethod
     def run(self):
         """
