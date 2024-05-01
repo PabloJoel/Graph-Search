@@ -31,7 +31,6 @@ def update_layout(n):
         for elem in DashVisualizer.dash_elements:
             if isinstance(elem, cyto.Cytoscape):
                 pass
-                #DashVisualizer.dash_elements[1].layout['name'] = 'preset'
         DashVisualizer.dash_show_flag = False
         DashVisualizer.dash_show_flag_done = False
 
@@ -194,7 +193,7 @@ class DashVisualizer(Visualizer):
         if not (len(DashVisualizer.dash_elements) > 0 and isinstance(DashVisualizer.dash_elements[0], dcc.Interval)):
             DashVisualizer.dash_elements.append(self.__generate_dash_interval())
 
-        if isinstance(graph, Graph):
+        if isinstance(graph, Graph) or issubclass(type(graph), Graph):
             graph = [graph]
 
         for elem in graph:

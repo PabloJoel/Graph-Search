@@ -3,6 +3,7 @@ from collections import deque
 import pandas as pd
 
 from Algorithms.Algorithm import Algorithm
+from Graphs.PandasGraph import PandasGraph
 from Graphs.Graph import Graph
 from Visualizers.ConsoleVisualizer import ConsoleVisualizer
 
@@ -36,7 +37,7 @@ class BFS(Algorithm):
         explored_vertices = set()
         explored_vertices.add(start_vertex)
 
-        solution = Graph(
+        solution = PandasGraph(
             data=pd.DataFrame(),
             source_col=self.graph.source_col,
             target_col=self.graph.target_col,

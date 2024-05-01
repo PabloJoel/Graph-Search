@@ -4,6 +4,7 @@ import pandas as pd
 
 from Algorithms.Algorithm import Algorithm
 from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Visualizers.ConsoleVisualizer import ConsoleVisualizer
 
 
@@ -144,7 +145,7 @@ class BDijkstra(Algorithm):
         :param str or list end_vertices:
         :return:
         """
-        solution_template = Graph(
+        solution_template = PandasGraph(
             data=pd.DataFrame(),
             source_col=self.graph.source_col,
             target_col=self.graph.target_col,

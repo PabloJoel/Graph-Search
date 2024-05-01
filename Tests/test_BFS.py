@@ -1,16 +1,15 @@
 import pandas as pd
 
-from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Algorithms.BFS import BFS
 from Visualizers.DashVisualizer import DashVisualizer
 
 
 def test_data_bidirectional():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, bidirectional=True)
+    graph = PandasGraph(data, bidirectional=True)
     bfs = BFS(graph)
     bfs.run('Frankfurt')
-    bfs.show()
 
     expected = pd.DataFrame(data=[
         {'source': 'Frankfurt', 'target': 'Mannheim'},
@@ -40,10 +39,9 @@ def test_data_bidirectional():
 
 def test_data():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     bfs = BFS(graph)
     bfs.run('Frankfurt')
-    bfs.show()
 
     expected = pd.DataFrame(data=[
         {'source': 'Frankfurt', 'target': 'Mannheim', 'weight_1': 85},
@@ -70,7 +68,7 @@ def test_data():
 
 def test_data_end():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, )
+    graph = PandasGraph(data, )
     bfs = BFS(graph)
     bfs.run('Frankfurt', end_vertex='Erfurt', show_end=True)
 
@@ -86,7 +84,7 @@ def test_data_end():
 
 def test_data_end2():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     bfs = BFS(graph)
     bfs.run('Frankfurt', end_vertex='Erfurt', show_end=True)
 
@@ -102,58 +100,55 @@ def test_data_end2():
 
 def test_data_missing_source():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     bfs = BFS(graph)
     bfs.run('Random')
-    bfs.show()
 
     assert bfs.solution.get_solution('Random') is None
 
 
 def test_data_missing_target():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     bfs = BFS(graph)
     bfs.run('Frankfurt', 'Random')
-    bfs.show()
 
     assert bfs.solution.get_solution('Random') is None
 
 
 def test_data_equal():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     bfs = BFS(graph)
     bfs.run('Frankfurt', 'Frankfurt')
-    bfs.show()
 
     assert bfs.solution.get_solution('Random') is None
 
 
 def test_data_dash():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     bfs = BFS(graph, visualizer=DashVisualizer())
     bfs.run('Frankfurt', show_end=True)
 
 
 def test_data_dash_end():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     bfs = BFS(graph, visualizer=DashVisualizer())
     bfs.run('Frankfurt', end_vertex='Erfurt', show_end=True)
 
 
 def test_data_dash_equal():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     bfs = BFS(graph, visualizer=DashVisualizer())
     bfs.run('Frankfurt', end_vertex='Frankfurt', show_end=True)
 
 
 def test_data_bidirectional_dash():
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     bfs = BFS(graph, visualizer=DashVisualizer())
     bfs.run('Frankfurt', show_end=True)
 
@@ -161,6 +156,6 @@ def test_data_bidirectional_dash():
 def test_data_dash_by_step():
     return
     data = pd.read_csv('bfs-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     bfs = BFS(graph, visualizer=DashVisualizer())
     bfs.run('Frankfurt', show_by_step=True, show_end=True)

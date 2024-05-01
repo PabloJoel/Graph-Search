@@ -1,5 +1,3 @@
-import pandas as pd
-
 from Algorithms.Algorithm import Algorithm
 from Graphs.Graph import Graph
 from Visualizers.ConsoleVisualizer import ConsoleVisualizer

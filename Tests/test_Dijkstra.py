@@ -1,16 +1,15 @@
 import pandas as pd
 
-from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Visualizers.DashVisualizer import DashVisualizer
 from Algorithms.Dijkstra import Dijkstra
 
 
 def test_data_bidirectional():
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph)
     dijkstra.run(start_vertex='a')
-    dijkstra.show()
 
     expected = pd.DataFrame(data=[
         {'source': 'a', 'target': 'b', 'weight_1': 2},
@@ -34,7 +33,7 @@ def test_data_bidirectional():
 
 def test_data_bidirectional_finish():
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph)
     dijkstra.run(start_vertex='a', end_vertex='c', show_end=True)
 
@@ -51,7 +50,7 @@ def test_data_bidirectional_finish():
 
 
 def test_namoa_inverse():
-    graph = Graph(data=pd.read_csv('namoa-data.csv'), weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data=pd.read_csv('namoa-data.csv'), weight_cols=['weight_1', 'weight_2'])
     visualizer = DashVisualizer()
 
     inverse_graph = graph.get_inverse_graph()
@@ -82,17 +81,16 @@ def test_namoa_inverse():
 
 def test_data_missing_source():
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph)
     dijkstra.run(start_vertex='Random')
-    dijkstra.show()
 
     assert dijkstra.solution.get_solution('Random') is None
 
 
 def test_data_missing_target():
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph)
     dijkstra.run(start_vertex='a', end_vertex='Random', show_end=True)
 
@@ -101,7 +99,7 @@ def test_data_missing_target():
 
 def test_data_equal():
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph)
     dijkstra.run(start_vertex='a', end_vertex='a', show_end=True)
 
@@ -110,28 +108,28 @@ def test_data_equal():
 
 def test_data_bidirectional_dash():
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
     dijkstra.run(start_vertex='a', show_end=True)
 
 
 def test_data_bidirectional_finish_dash():
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
     dijkstra.run(start_vertex='a', end_vertex='c', show_end=True)
 
 
 def test_data_dash():
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
     dijkstra.run(start_vertex='a', show_end=True)
 
 
 def test_data_finish_dash():
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
     dijkstra.run(start_vertex='a', end_vertex='c', show_end=True)
 
@@ -139,7 +137,7 @@ def test_data_finish_dash():
 def test_data_dash_by_step():
     return
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
     dijkstra.run(start_vertex='a', show_by_step=True, show_end=True)
 
@@ -147,7 +145,7 @@ def test_data_dash_by_step():
 def test_data_finish_dash_by_step():
     return
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, weight_cols=['weight_1'])
+    graph = PandasGraph(data, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
     dijkstra.run(start_vertex='a', end_vertex='c', show_by_step=True, show_end=True)
 
@@ -155,7 +153,7 @@ def test_data_finish_dash_by_step():
 def test_data_bidirectional_dash_by_step():
     return
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
     dijkstra.run(start_vertex='a', show_by_step=True, show_end=True)
 
@@ -163,6 +161,6 @@ def test_data_bidirectional_dash_by_step():
 def test_data_bidirectional_finish_dash_by_step():
     return
     data = pd.read_csv('dijkstra-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     dijkstra = Dijkstra(graph, visualizer=DashVisualizer())
     dijkstra.run(start_vertex='a', end_vertex='c', show_by_step=True, show_end=True)

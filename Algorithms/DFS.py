@@ -2,8 +2,8 @@ import pandas as pd
 
 from Algorithms.Algorithm import Algorithm
 from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Visualizers.ConsoleVisualizer import ConsoleVisualizer
-from Solution.Solution import Solution
 
 
 class DFS(Algorithm):
@@ -35,7 +35,7 @@ class DFS(Algorithm):
         """
         self.explored_vertices = set()
 
-        solution_template = Graph(
+        solution_template = PandasGraph(
             data=pd.DataFrame(),
             source_col=self.graph.source_col,
             target_col=self.graph.target_col,

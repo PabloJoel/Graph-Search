@@ -13,7 +13,7 @@ class ConsoleVisualizer(Visualizer):
         if isinstance(graph, list):
             for elem in graph:
                 print(elem.data)
-        elif isinstance(graph, Graph):
+        elif isinstance(graph, Graph) or issubclass(type(graph), Graph):
             print(graph.data)
         else:
             raise TypeError(f"ConsoleVisualizer can only show Graph or list of Graph, not {type(graph)}")

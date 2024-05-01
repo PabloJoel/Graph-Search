@@ -1,13 +1,13 @@
 import pandas as pd
 
-from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Algorithms.AStar import AStar
 from Visualizers.DashVisualizer import DashVisualizer
 
 
 def test_astar():
     data = pd.read_csv('astar-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1'])
     a_star = AStar(graph)
     a_star.run(start_vertex='a', end_vertex='f', show_end=True)
 
@@ -26,7 +26,7 @@ def test_astar():
 
 def test_astar_bidirectional():
     data = pd.read_csv('astar-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     a_star = AStar(graph)
     a_star.run(start_vertex='a', end_vertex='f', show_end=True)
 
@@ -43,7 +43,7 @@ def test_astar_bidirectional():
 
 def test_astar_missing_source():
     data = pd.read_csv('astar-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1'])
     a_star = AStar(graph)
     a_star.run(start_vertex='Random', end_vertex='f', show_end=True)
 
@@ -52,7 +52,7 @@ def test_astar_missing_source():
 
 def test_astar_missing_target():
     data = pd.read_csv('astar-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1'])
     a_star = AStar(graph)
     a_star.run(start_vertex='a', end_vertex='Random', show_end=True)
 
@@ -61,7 +61,7 @@ def test_astar_missing_target():
 
 def test_astar_equal():
     data = pd.read_csv('astar-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1'])
     a_star = AStar(graph)
     a_star.run(start_vertex='a', end_vertex='a', show_end=True)
 
@@ -70,14 +70,14 @@ def test_astar_equal():
 
 def test_astar_dash():
     data = pd.read_csv('astar-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1'])
     a_star = AStar(graph, visualizer=DashVisualizer())
     a_star.run(start_vertex='a', end_vertex='f', show_end=True)
 
 
 def test_astar_bidirectional_dash():
     data = pd.read_csv('astar-data.csv')
-    graph = Graph(data, bidirectional=True, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=True, weight_cols=['weight_1'])
     a_star = AStar(graph, visualizer=DashVisualizer())
     a_star.run(start_vertex='a', end_vertex='f', show_end=True)
 
@@ -85,6 +85,6 @@ def test_astar_bidirectional_dash():
 def test_astar_dash_by_step():
     return
     data = pd.read_csv('astar-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1'])
     a_star = AStar(graph, visualizer=DashVisualizer())
     a_star.run(start_vertex='a', end_vertex='f', show_by_step=True, show_end=True)

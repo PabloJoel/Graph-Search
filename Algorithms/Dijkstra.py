@@ -1,9 +1,8 @@
-from collections import deque
-
 import pandas as pd
 
 from Algorithms.Algorithm import Algorithm
 from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Visualizers.ConsoleVisualizer import ConsoleVisualizer
 
 
@@ -34,7 +33,7 @@ class Dijkstra(Algorithm):
         explored_vertices = set()
         finished = False
 
-        solution = Graph(
+        solution = PandasGraph(
             data=pd.DataFrame(),
             source_col=self.graph.source_col,
             target_col=self.graph.target_col,

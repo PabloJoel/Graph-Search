@@ -1,6 +1,6 @@
 import pandas as pd
 
-from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Algorithms.NAMOA import NAMOA
 
 from Visualizers.DashVisualizer import DashVisualizer
@@ -9,7 +9,7 @@ from Tests.heuristics import MockedHeuristicMOA, MockedHeuristicNAMOA
 
 def test_namoa():
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA(graph))
     namoa.run(start_vertex='s', end_vertices='y', show_end=True)
 
@@ -38,7 +38,7 @@ def test_namoa():
 def test_namoa2():
     # Using the MOA graph
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     namoa = NAMOA(graph, heuristic=MockedHeuristicMOA(graph))
     namoa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_end=True)
 
@@ -82,7 +82,7 @@ def test_namoa2():
 
 def test_namoa_missing_source():
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA(graph))
     namoa.run(start_vertex='fg', end_vertices='y', show_end=True)
 
@@ -91,7 +91,7 @@ def test_namoa_missing_source():
 
 def test_namoa_missing_target():
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA(graph))
     namoa.run(start_vertex='s', end_vertices='fdgh', show_end=True)
 
@@ -100,7 +100,7 @@ def test_namoa_missing_target():
 
 def test_namoa_missing_equal():
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA(graph))
     namoa.run(start_vertex='s', end_vertices='s', show_end=True)
 
@@ -109,7 +109,7 @@ def test_namoa_missing_equal():
 
 def test_namoa_dash():
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA(graph), visualizer=DashVisualizer())
     namoa.run(start_vertex='s', end_vertices='y', show_end=True)
 
@@ -117,6 +117,6 @@ def test_namoa_dash():
 def test_namoa_dash_by_step():
     return
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     namoa = NAMOA(graph, heuristic=MockedHeuristicNAMOA(graph), visualizer=DashVisualizer())
     namoa.run(start_vertex='s', end_vertices='y', show_by_step=True, show_end=True)

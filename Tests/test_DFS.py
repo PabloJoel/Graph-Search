@@ -1,13 +1,13 @@
 import pandas as pd
 
-from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Algorithms.DFS import DFS
 from Visualizers.DashVisualizer import DashVisualizer
 
 
 def test_data_bidirectional():
     data = pd.read_csv('dfs-data.csv')
-    graph = Graph(data, bidirectional=True)
+    graph = PandasGraph(data, bidirectional=True)
     dfs = DFS(graph)
     dfs.run(1, end_vertex=3, show_end=True)
 
@@ -24,7 +24,7 @@ def test_data_bidirectional():
 
 def test_data():
     data = pd.read_csv('dfs-data.csv')
-    graph = Graph(data)
+    graph = PandasGraph(data)
     dfs = DFS(graph)
     dfs.run(1, show_end=True)
 
@@ -48,7 +48,7 @@ def test_data():
 
 def test_data_missing_source():
     data = pd.read_csv('dfs-data.csv')
-    graph = Graph(data)
+    graph = PandasGraph(data)
     dfs = DFS(graph)
     dfs.run('a', show_end=True)
 
@@ -57,7 +57,7 @@ def test_data_missing_source():
 
 def test_data_missing_target():
     data = pd.read_csv('dfs-data.csv')
-    graph = Graph(data)
+    graph = PandasGraph(data)
     dfs = DFS(graph)
     dfs.run(1, 'a', show_end=True)
 
@@ -66,7 +66,7 @@ def test_data_missing_target():
 
 def test_data_equal():
     data = pd.read_csv('dfs-data.csv')
-    graph = Graph(data)
+    graph = PandasGraph(data)
     dfs = DFS(graph)
     dfs.run(1, 1, show_end=True)
 
@@ -75,14 +75,14 @@ def test_data_equal():
 
 def test_data_bidirectional_dash():
     data = pd.read_csv('dfs-data.csv')
-    graph = Graph(data, bidirectional=True)
+    graph = PandasGraph(data, bidirectional=True)
     dfs = DFS(graph, visualizer=DashVisualizer())
     dfs.run(1, end_vertex=3, show_end=True)
 
 
 def test_data_dash():
     data = pd.read_csv('dfs-data.csv')
-    graph = Graph(data)
+    graph = PandasGraph(data)
     dfs = DFS(graph, visualizer=DashVisualizer())
     dfs.run(1,show_end=True)
 
@@ -90,7 +90,7 @@ def test_data_dash():
 def test_data_dash_by_step():
     return
     data = pd.read_csv('dfs-data.csv')
-    graph = Graph(data)
+    graph = PandasGraph(data)
     dfs = DFS(graph, visualizer=DashVisualizer())
     dfs.run(1, show_by_step=True, show_end=True)
 

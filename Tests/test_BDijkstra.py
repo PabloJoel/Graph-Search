@@ -1,6 +1,6 @@
 import pandas as pd
 
-from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Algorithms.BDijkstra import Heap, BDijkstra
 from Visualizers.DashVisualizer import DashVisualizer
 
@@ -62,7 +62,7 @@ def test_heap():
 
 def test_BDijkstra_namoa_graph():
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     bdijkstra = BDijkstra(graph)
     bdijkstra.run(start_vertex='s', end_vertex='y', show_end=True)
 
@@ -93,7 +93,7 @@ def test_BDijkstra_namoa_graph():
 def test_BDijkstra_moa_graph_y3():
     # Using the MOA graph
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     bdijkstra = BDijkstra(graph)
     bdijkstra.run(start_vertex='s', end_vertex='y3', show_end=True)
 
@@ -133,7 +133,7 @@ def test_BDijkstra_moa_graph_y3():
 def test_BDijkstra_moa_graph_y1():
     # Using the MOA graph
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     bdijkstra = BDijkstra(graph)
     bdijkstra.run(start_vertex='s', end_vertex='y1', show_end=True)
 
@@ -165,7 +165,7 @@ def test_BDijkstra_moa_graph_y1():
 
 def test_namoa_missing_source():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     bdijkstra = BDijkstra(graph)
     bdijkstra.run(start_vertex='fg', end_vertex='y', show_end=True)
 
@@ -174,7 +174,7 @@ def test_namoa_missing_source():
 
 def test_namoa_missing_target():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     bdijkstra = BDijkstra(graph)
     bdijkstra.run(start_vertex='s', end_vertex='fdgy', show_end=True)
 
@@ -183,7 +183,7 @@ def test_namoa_missing_target():
 
 def test_namoa_missing_equal():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     bdijkstra = BDijkstra(graph)
     bdijkstra.run(start_vertex='s', end_vertex='s', show_end=True)
 
@@ -192,7 +192,7 @@ def test_namoa_missing_equal():
 
 def test_pulse_dash():
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     bdijkstra = BDijkstra(graph, visualizer=DashVisualizer())
     bdijkstra.run(start_vertex='s', end_vertex='y', show_end=True)
 
@@ -200,6 +200,6 @@ def test_pulse_dash():
 def test_pulse_dash_by_step():
     return
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     bdijkstra = BDijkstra(graph, visualizer=DashVisualizer())
     bdijkstra.run(start_vertex='s', end_vertex='y', show_by_step=True, show_end=True)

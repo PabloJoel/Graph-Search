@@ -1,7 +1,5 @@
 from abc import abstractmethod
 
-from Graphs.Graph import Graph
-
 
 class Visualizer:
     """

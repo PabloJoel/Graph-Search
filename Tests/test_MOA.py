@@ -1,6 +1,6 @@
 import pandas as pd
 
-from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Algorithms.MOA import MOA
 from Visualizers.DashVisualizer import DashVisualizer
 from Tests.heuristics import MockedHeuristicMOA, MockedHeuristicNAMOA
@@ -8,7 +8,7 @@ from Tests.heuristics import MockedHeuristicMOA, MockedHeuristicNAMOA
 
 def test_moa():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     moa = MOA(graph, heuristic=MockedHeuristicMOA(graph))
     moa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_end=True)
 
@@ -48,7 +48,7 @@ def test_moa():
 def test_moa2():
     # using the NAMOA graph
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     moa = MOA(graph, heuristic=MockedHeuristicNAMOA(graph))
     moa.run(start_vertex='s', end_vertices=['y'], show_end=True)
 
@@ -74,7 +74,7 @@ def test_moa2():
 
 def test_moa_missing_source():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     moa = MOA(graph, heuristic=MockedHeuristicMOA(graph))
     moa.run(start_vertex='df', end_vertices=['y1','y2','y3'], show_end=True)
 
@@ -85,7 +85,7 @@ def test_moa_missing_source():
 
 def test_moa_missing_target():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     moa = MOA(graph, heuristic=MockedHeuristicMOA(graph))
     moa.run(start_vertex='s', end_vertices=['x','y'], show_end=True)
 
@@ -95,7 +95,7 @@ def test_moa_missing_target():
 
 def test_moa_missing_equal():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     moa = MOA(graph, heuristic=MockedHeuristicMOA(graph))
     moa.run(start_vertex='s', end_vertices=['s'], show_end=True)
 
@@ -104,7 +104,7 @@ def test_moa_missing_equal():
 
 def test_moa_dash():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     moa = MOA(graph, heuristic=MockedHeuristicMOA(graph), visualizer=DashVisualizer())
     moa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_end=True)
 
@@ -112,14 +112,14 @@ def test_moa_dash():
 def test_moa_dash_by_step():
     return
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     moa = MOA(graph, heuristic=MockedHeuristicMOA(graph), visualizer=DashVisualizer())
     moa.run(start_vertex='s', end_vertices=['y1','y2','y3'], show_by_step=True, show_end=True)
 
 
 def test_dominated_empty1():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     moa = MOA(graph)
 
     assert moa.is_dominated([2, 4], []) is False
@@ -127,7 +127,7 @@ def test_dominated_empty1():
 
 def test_dominated_empty2():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     moa = MOA(graph)
 
     assert moa.is_dominated([], [1,3]) is True
@@ -135,7 +135,7 @@ def test_dominated_empty2():
 
 def test_dominated_empty3():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     moa = MOA(graph)
 
     assert moa.is_dominated([], []) is False
@@ -143,7 +143,7 @@ def test_dominated_empty3():
 
 def test_dominated1():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     moa = MOA(graph)
 
     assert moa.is_dominated([[2,4],[3,3]], [5,2]) is False
@@ -156,7 +156,7 @@ def test_dominated1():
 
 def test_dominated2():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     moa = MOA(graph)
 
     assert moa.is_dominated([5,2], [8,10]) is False
@@ -173,7 +173,7 @@ def test_dominated2():
 
 def test_dominated3():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     moa = MOA(graph)
 
     assert moa.is_dominated([[7,7],[4,9]], [5,2]) is False
@@ -186,7 +186,7 @@ def test_dominated3():
 
 def test_dominated4():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     moa = MOA(graph)
 
     assert moa.is_dominated([[4,9],[7,6],[10,4]], [[3,5],[6,3]]) is False
@@ -197,7 +197,7 @@ def test_dominated4():
 
 def test_dominated_infinity():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     moa = MOA(graph)
 
     assert moa.is_dominated([1,2], float('inf')) is False
@@ -210,7 +210,7 @@ def test_dominated_infinity():
 
 def test_nd_successors():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     moa = MOA(graph)
     assert moa._get_nd_successors('s') == [[1,2],[3,1]]
 

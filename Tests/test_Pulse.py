@@ -1,6 +1,6 @@
 import pandas as pd
 
-from Graphs.Graph import Graph
+from Graphs.PandasGraph import PandasGraph
 from Algorithms.PULSE import PULSE
 
 from Visualizers.DashVisualizer import DashVisualizer
@@ -8,7 +8,7 @@ from Visualizers.DashVisualizer import DashVisualizer
 
 def test_pulse():
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     pulse = PULSE(graph)
     pulse.run(start_vertex='s', end_vertex='y', show_end=True)
 
@@ -37,7 +37,7 @@ def test_pulse():
 def test_pulse_moa_graph_y1():
     # Using the MOA graph
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     pulse = PULSE(graph)
     pulse.run(start_vertex='s', end_vertex='y1', show_end=True)
 
@@ -58,7 +58,7 @@ def test_pulse_moa_graph_y1():
 def test_pulse_moa_graph_y3():
     # Using the MOA graph
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     pulse = PULSE(graph)
     pulse.run(start_vertex='s', end_vertex='y3', show_end=True)
 
@@ -97,7 +97,7 @@ def test_pulse_moa_graph_y3():
 
 def test_namoa_missing_source():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
     pulse = PULSE(graph)
     pulse.run(start_vertex='fg', end_vertex='y', show_end=True)
 
@@ -106,7 +106,7 @@ def test_namoa_missing_source():
 
 def test_namoa_missing_target():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     pulse = PULSE(graph)
     pulse.run(start_vertex='s', end_vertex='fdgy', show_end=True)
 
@@ -115,7 +115,7 @@ def test_namoa_missing_target():
 
 def test_namoa_missing_equal():
     data = pd.read_csv('moa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     pulse = PULSE(graph)
     pulse.run(start_vertex='s', end_vertex='s', show_end=True)
 
@@ -124,7 +124,7 @@ def test_namoa_missing_equal():
 
 def test_pulse_dash():
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     pulse = PULSE(graph, visualizer=DashVisualizer())
     pulse.run(start_vertex='s', end_vertex='y', show_end=True)
 
@@ -132,14 +132,14 @@ def test_pulse_dash():
 def test_pulse_dash_by_step():
     return
     data = pd.read_csv('namoa-data.csv')
-    graph = Graph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
+    graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1', 'weight_2'])
     pulse = PULSE(graph, visualizer=DashVisualizer())
     pulse.run(start_vertex='s', end_vertex='y', show_by_step=True, show_end=True)
 
 
 def test_dominated_empty1():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     pulse = PULSE(graph)
 
     assert pulse.is_dominated((2, 4), ()) is False
@@ -147,7 +147,7 @@ def test_dominated_empty1():
 
 def test_dominated_empty2():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     pulse = PULSE(graph)
 
     assert pulse.is_dominated((), (1,3)) is True
@@ -155,7 +155,7 @@ def test_dominated_empty2():
 
 def test_dominated_empty3():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     pulse = PULSE(graph)
 
     assert pulse.is_dominated((), ()) is False
@@ -163,7 +163,7 @@ def test_dominated_empty3():
 
 def test_dominated1():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     pulse = PULSE(graph)
 
     assert pulse.is_dominated([(2,4),(3,3)], (5,2)) is False
@@ -176,7 +176,7 @@ def test_dominated1():
 
 def test_dominated2():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     pulse = PULSE(graph)
 
     assert pulse.is_dominated((5,2), (8,10)) is False
@@ -193,7 +193,7 @@ def test_dominated2():
 
 def test_dominated3():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     pulse = PULSE(graph)
 
     assert pulse.is_dominated([(7,7),(4,9)], (5,2)) is False
@@ -206,7 +206,7 @@ def test_dominated3():
 
 def test_dominated4():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     pulse = PULSE(graph)
 
     assert pulse.is_dominated([(4,9),(7,6),(10,4)], [(3,5),(6,3)]) is False
@@ -217,7 +217,7 @@ def test_dominated4():
 
 def test_dominated_infinity():
     data = pd.DataFrame()
-    graph = Graph(data, bidirectional=False)
+    graph = PandasGraph(data, bidirectional=False)
     pulse = PULSE(graph)
 
     assert pulse.is_dominated((1,2), float('inf')) is False
