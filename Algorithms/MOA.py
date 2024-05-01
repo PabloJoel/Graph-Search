@@ -6,7 +6,6 @@ from Algorithms.Algorithm import Algorithm
 from Graphs.Graph import Graph
 from Graphs.PandasGraph import PandasGraph
 from Visualizers.ConsoleVisualizer import ConsoleVisualizer
-from Heuristics.Random import Random
 
 
 class MOA(Algorithm):
@@ -14,7 +13,7 @@ class MOA(Algorithm):
     MOA* algorithm
     """
 
-    def __init__(self, graph: Graph, visualizer=ConsoleVisualizer(), heuristic=None):
+    def __init__(self, graph: Graph, heuristic, visualizer=ConsoleVisualizer()):
         """
         Creates the algorithm by using the input graph that contains the data, and by creating an empty Graph where the
         solution is going to be added later.
@@ -25,10 +24,7 @@ class MOA(Algorithm):
         """
 
         super().__init__(graph, visualizer)
-        if heuristic is None:
-            self.heuristic = Random(graph)
-        else:
-            self.heuristic = heuristic
+        self.heuristic = heuristic
 
     def run(self, start_vertex, end_vertices=None, show_by_step=False, show_end=False):
         """

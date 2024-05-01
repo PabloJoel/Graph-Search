@@ -120,7 +120,7 @@ def test_moa_dash_by_step():
 def test_dominated_empty1():
     data = pd.DataFrame()
     graph = PandasGraph(data, bidirectional=False)
-    moa = MOA(graph)
+    moa = MOA(graph, None)
 
     assert moa.is_dominated([2, 4], []) is False
 
@@ -128,7 +128,7 @@ def test_dominated_empty1():
 def test_dominated_empty2():
     data = pd.DataFrame()
     graph = PandasGraph(data, bidirectional=False)
-    moa = MOA(graph)
+    moa = MOA(graph, None)
 
     assert moa.is_dominated([], [1,3]) is True
 
@@ -136,7 +136,7 @@ def test_dominated_empty2():
 def test_dominated_empty3():
     data = pd.DataFrame()
     graph = PandasGraph(data, bidirectional=False)
-    moa = MOA(graph)
+    moa = MOA(graph, None)
 
     assert moa.is_dominated([], []) is False
 
@@ -144,7 +144,7 @@ def test_dominated_empty3():
 def test_dominated1():
     data = pd.DataFrame()
     graph = PandasGraph(data, bidirectional=False)
-    moa = MOA(graph)
+    moa = MOA(graph, None)
 
     assert moa.is_dominated([[2,4],[3,3]], [5,2]) is False
     assert moa.is_dominated([[2,4],[3,3]], [2,5]) is False
@@ -157,7 +157,7 @@ def test_dominated1():
 def test_dominated2():
     data = pd.DataFrame()
     graph = PandasGraph(data, bidirectional=False)
-    moa = MOA(graph)
+    moa = MOA(graph, None)
 
     assert moa.is_dominated([5,2], [8,10]) is False
     assert moa.is_dominated([5,2], [3,5]) is False
@@ -174,7 +174,7 @@ def test_dominated2():
 def test_dominated3():
     data = pd.DataFrame()
     graph = PandasGraph(data, bidirectional=False)
-    moa = MOA(graph)
+    moa = MOA(graph, None)
 
     assert moa.is_dominated([[7,7],[4,9]], [5,2]) is False
     assert moa.is_dominated([[7,7],[4,9]], [8,10]) is False
@@ -187,7 +187,7 @@ def test_dominated3():
 def test_dominated4():
     data = pd.DataFrame()
     graph = PandasGraph(data, bidirectional=False)
-    moa = MOA(graph)
+    moa = MOA(graph, None)
 
     assert moa.is_dominated([[4,9],[7,6],[10,4]], [[3,5],[6,3]]) is False
     assert moa.is_dominated([[4,9],[7,6],[10,4]], [8,10]) is False
@@ -198,7 +198,7 @@ def test_dominated4():
 def test_dominated_infinity():
     data = pd.DataFrame()
     graph = PandasGraph(data, bidirectional=False)
-    moa = MOA(graph)
+    moa = MOA(graph, None)
 
     assert moa.is_dominated([1,2], float('inf')) is False
     assert moa.is_dominated(float('inf'), [1,2]) is True
@@ -211,7 +211,7 @@ def test_dominated_infinity():
 def test_nd_successors():
     data = pd.read_csv('moa-data.csv')
     graph = PandasGraph(data, bidirectional=False, weight_cols=['weight_1','weight_2'])
-    moa = MOA(graph)
+    moa = MOA(graph, None)
     assert moa._get_nd_successors('s') == [[1,2],[3,1]]
 
 
