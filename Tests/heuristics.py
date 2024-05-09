@@ -52,5 +52,5 @@ class MockedHeuristicAutomatic(Heuristic):
             return self.heurs[vertex]
         else:
             distance = self.bfs_heur.calculate(vertex, self.end_vertex)
-            self.heurs.update({vertex: [distance, distance]})
+            self.heurs.update({vertex: [distance for i in range(len(self.graph.weight_cols))]})
             return self.heurs[vertex]
