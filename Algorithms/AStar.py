@@ -8,7 +8,7 @@ class AStar(Algorithm):
     A* algorithm
     """
 
-    def __init__(self, graph: Graph, visualizer=ConsoleVisualizer(), heuristic=BFS):
+    def __init__(self, graph: Graph, visualizer=ConsoleVisualizer(), heuristic=None):
         """
         Creates the algorithm by using the input graph that contains the data, and by creating an empty Graph where the
         solution is going to be added later.
@@ -19,7 +19,10 @@ class AStar(Algorithm):
         """
 
         super().__init__(graph, visualizer)
-        self.heuristic = heuristic(graph)
+        if heuristic is None:
+            self.heuristic = BFS(graph)
+        else:
+            self.heuristic = heuristic
 
     def run(self, start_vertex, end_vertex=None, show_by_step=False, show_end=False):
         """
