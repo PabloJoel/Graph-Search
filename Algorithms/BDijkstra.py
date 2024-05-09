@@ -183,11 +183,15 @@ class BDijkstra(Algorithm):
                     self.d2[i] = lnew[2]
                 self.relaxation_process(i, l_star)
 
-            end_vertex = all_vertices if end_vertex is None else end_vertex
-            for sol in self.L[end_vertex]:
-                solution_path = solution_template.copy()
-                self._backtrack_sol(sol, solution_path)
-                self.solution.add_solution(end_vertex, solution_path)
+            end_vertex = all_vertices if end_vertex is None else [end_vertex]
+            for v in end_vertex:
+                for sol in self.L[v]:
+                    try:
+                        solution_path = solution_template.copy()
+                        self._backtrack_sol(sol, solution_path)
+                        self.solution.add_solution(v, solution_path)
+                    except Exception as ex:
+                        print(ex)
 
         self.metrics.end_execution()
         if self.solution.is_empty():
