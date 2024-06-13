@@ -13,7 +13,7 @@ def plot_linegraph(iters, plots, labels, title, xlabel, ylabel, yscale='linear')
     plt.show()
 
 
-def test_uniobjetivo():
+def test_monoobjetivo():
     # Single Objective Test
     nodes = [10, 50, 100, 500, 1000, 5000, 10000]
 
@@ -27,12 +27,12 @@ def test_uniobjetivo():
     astar_nodes = [8, 8, 50, 150, 340, 870, 5000]
     dijkstra_nodes = [8, 7, 55, 249, 430, 1619, 6066]
 
-    title = "Comparativa del tiempo de ejecución (uniobjetivo)"
+    title = "Comparativa del tiempo de ejecución (monoobjetivo)"
     xlabel = "Número de vértices del grafo"
     ylabel = "Tiempo de ejecución del algoritmo (segundos)"
     plot_linegraph(nodes, [moa_time,namoa_time,astar_time,dijkstra_time], ['MOA', 'NAMOA', 'A*', 'Dijkstra'], title, xlabel, ylabel, yscale='log')
 
-    title = "Comparativa de vértices explorados (uniobjetivo)"
+    title = "Comparativa de vértices explorados (monoobjetivo)"
     ylabel = "Cantidad de vértices explorados"
     plot_linegraph(nodes, [moa_nodes,namoa_nodes,astar_nodes,dijkstra_nodes], ['MOA', 'NAMOA', 'A*', 'Dijkstra'], title, xlabel, ylabel, yscale='log')
 
